@@ -61,15 +61,15 @@ However, newer versions of WildFly are generally backwards compatible (unless yo
 internals) so you can install it into a later version of WildFly. 
 
 It adds an additional layer called `template-layer`, which contains a new
-subsystem called `template-subsystem`. This subsystem is implemented in the 
-`org.wildfly.extension.template-subsystem` module which in turn has a dependency
-on the `org.wildfly.template-dependency` module. The latter module basically
+subsystem called `wildfly-grpc-subsystem`. This subsystem is implemented in the 
+`org.wildfly.extension.wildfly-grpc-subsystem` module which in turn has a dependency
+on the `org.wildfly.wildfly-grpc-dependency` module. The latter module basically
 makes a CDI `@Produces` available. The code for these modules are in the
 [`subsystem/`](subsystem)
 and [`dependency/`](dependency)
 Maven sub-modules, and the subsystem's 
 [`DependencyProcessor`](subsystem/src/main/java/org/wildfly/extension/feature/pack/template/subsystem/deployment/DependencyProcessor.java)
-makes the `org.wildfly.template-dependency` module available to the deployment. 
+makes the `org.wildfly.wildfly-grpc-dependency` module available to the deployment. 
 
 The [`feature-pack/`](feature-pack)
 Maven sub-module defines the Galleon feature pack. 
@@ -80,31 +80,31 @@ The layer is defined in [`feature-pack/src/main/resources/layers/standalone/temp
 As we are making a CDI `@Produces` method available we need CDI, so our layer has a dependency on
 the `cdi` layer.
 
-Our layer also has a dependency on the `template-subsystem` feature group which is defined in
-[`feature-pack/src/main/resources/feature_groups/template-subsystem.xml`](feature-pack/src/main/resources/feature_groups/template-subsystem.xml)
-which contains our `<feature spec="subsystem.template-subsystem"/>`.
+Our layer also has a dependency on the `wildfly-grpc-subsystem` feature group which is defined in
+[`feature-pack/src/main/resources/feature_groups/wildfly-grpc-subsystem.xml`](feature-pack/src/main/resources/feature_groups/wildfly-grpc-subsystem.xml)
+which contains our `<feature spec="subsystem.wildfly-grpc-subsystem"/>`.
 Note that the 'spec' value is of the format:
 ```
 subsystem.<subsystem-name>
 ```  
-In our case the name of the subsystem is `template-subsystem`, so the full name is `subsystem.template-subsystem`. 
+In our case the name of the subsystem is `wildfly-grpc-subsystem`, so the full name is `subsystem.wildfly-grpc-subsystem`. 
 When provisioning the server this results in an operation to add the subsystem:
 ```
-/subsystem=template-subsystem:add()
+/subsystem=wildfly-grpc-subsystem:add()
 ``` 
 Our subsystem is empty, as it has no attributes or child resources. 
 
 As an example, __if__ the subsystem had an attribute called
 `test` which should be set to `10`, we would write its feature spec as 
 ```
-<feature spec="subsystem.template-subsystem">
+<feature spec="subsystem.wildfly-grpc-subsystem">
     <param name="test" value="10"/>
 </feature
 ```
 which would result in the following __not working__ (since our subsystem has no attributes) 
 subsystem add operation:
 ```
-/subsystem=template-subsystem:add(test=10)
+/subsystem=wildfly-grpc-subsystem:add(test=10)
 ``` 
 
 
@@ -112,9 +112,9 @@ subsystem add operation:
 
 [`feature-pack/wildfly-feature-pack-build.xml`](feature-pack/wildfly-feature-pack-build.xml)
 takes care of adding the subsystem to the configuration under `<extensions>` near the end of the file
-where we add a dependency on the `org.wildfly.extension.template-subsystem` module we have defined for our subsystem.
+where we add a dependency on the `org.wildfly.extension.wildfly-grpc-subsystem` module we have defined for our subsystem.
 Galleon is smart enough to look at the dependencies of this module to bring in modules it in turn depends on. 
-So in this case it will e.g. bring in the `org.wildfly.template-dependency` module (or 'package' in Galleon terminology)
+So in this case it will e.g. bring in the `org.wildfly.wildfly-grpc-dependency` module (or 'package' in Galleon terminology)
 too. 
 
 It also configures the feature packs that we depend upon. Note
@@ -134,11 +134,11 @@ available in the server you would use the `build-user-feature-pack` instead, and
 [`wildfly-extras/wildfly-datasources-feature-pack/`](https://github.com/wildfly-extras/wildfly-datasources-feature-pack)
 contains an example of this simpler scenario. To bring in the module containing our functionality in this case you
 need to add it to the `packages` section of the `layer-spec.xml` instead. The name of the package in this case
-is the name of your module (i.e. `org.wildfly.extension.template-subsystem`). As before the `org.wildfly.template-dependency`
+is the name of your module (i.e. `org.wildfly.extension.wildfly-grpc-subsystem`). As before the `org.wildfly.wildfly-grpc-dependency`
 will also be brought in since it is a dependency in the subsystem's `module.xml`._
 
 If adding licenses is important to you, they are set up in the following places:
-* [`feature-pack/src/license/template-feature-pack-licenses.xml`](feature-pack/src/license/template-feature-pack-licenses.xml) - 
+* [`feature-pack/src/license/wildfly-grpc-feature-pack-licenses.xml`](feature-pack/src/license/wildfly-grpc-feature-pack-licenses.xml) - 
 This file lists the dependencies that are installed by the feature pack, and lists the
 license for each.
 * [`feature-pack/src/main/resources/content/docs/licenses/`](feature-pack/src/main/resources/content/docs/licenses) -
@@ -246,15 +246,15 @@ WildFly feature pack. We will add it in the next step.
 #### Install our layer
 Next we want to install our layer. We do this by running:
 ```
-~/Downloads/galleon-4.2.8.Final/bin/galleon.sh install org.wildfly.extras.grpc:template-feature-pack:0.0.1 --layers=template-layer --dir=wildfly
+~/Downloads/galleon-4.2.8.Final/bin/galleon.sh install org.wildfly.extras.grpc:wildfly-grpc-feature-pack:0.0.1 --layers=template-layer --dir=wildfly
 ``` 
-`org.wildfly.extras.grpc:template-feature-pack:0.0.1`
+`org.wildfly.extras.grpc:wildfly-grpc-feature-pack:0.0.1`
 is the Maven GAV of the Galleon feature pack (i.e. what we have in 
 [`feature-pack/pom.xml`](feature-pack/pom.xml)).
 
 If you went with the trimmed server in the previous step, and you look at
 `wildfly/standalone/configuration/standalone.xml`, you should see that 
-both the `template-subsystem` and the `weld` subsystems were added in this second step.
+both the `wildfly-grpc-subsystem` and the `weld` subsystems were added in this second step.
 Weld is our CDI implementation, and as we have seen CDI is a dependency of our layer, so 
 Galleon pulls it in too!
 
@@ -310,5 +310,5 @@ To debug failures in the provisioning of the server of the creation of the Galle
 good to run `mvn install -X` which will provide more logging.
 
 If the above doesn't shed any light on your problems, it can also be good to look at the 
-`feature-pack/target/layout/org.wildfly.extras.grpc/template-feature-pack/<version>/`
+`feature-pack/target/layout/org.wildfly.extras.grpc/wildfly-grpc-feature-pack/<version>/`
 directory to see if everything you expect is there.

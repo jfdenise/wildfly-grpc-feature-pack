@@ -40,7 +40,7 @@ public class TemplateExtension implements Extension {
      * The name of our subsystem within the model.
      * TODO Rename it to your subsystem name
      */
-    public static final String SUBSYSTEM_NAME = "template-subsystem";
+    public static final String SUBSYSTEM_NAME = "wildfly-grpc-subsystem";
 
     protected static final PathElement SUBSYSTEM_PATH = PathElement.pathElement(SUBSYSTEM, SUBSYSTEM_NAME);
 

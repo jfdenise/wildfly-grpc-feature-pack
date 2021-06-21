@@ -33,12 +33,12 @@ public class SubsystemTestCase extends AbstractSubsystemBaseTest {
     @Override
     protected String getSubsystemXml() throws IOException {
         //test configuration put in standalone.xml
-        return readResource("template-subsystem-test.xml");
+        return readResource("wildfly-grpc-subsystem-test.xml");
     }
 
     @Override
     protected String getSubsystemXsdPath() throws Exception {
-        return "schema/template-subsystem_1_0.xsd";
+        return "schema/wildfly-grpc-subsystem_1_0.xsd";
     }
 
     protected AdditionalInitialization createAdditionalInitialization() {

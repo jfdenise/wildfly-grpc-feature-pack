@@ -53,9 +53,9 @@ public class DependencyProcessor implements DeploymentUnitProcessor {
         // TODO use the name of the modules after renaming, and add any other dependencies
         // In this case we don't need any classes from the subsystem module itself so we don't need to add it to the
         // deployment's module dependencies
-        // moduleSpecification.addSystemDependency(new ModuleDependency(moduleLoader, "org.wildfly.extension.template-subsystem", false, false, true, false));
+        // moduleSpecification.addSystemDependency(new ModuleDependency(moduleLoader, "org.wildfly.extension.wildfly-grpc-subsystem", false, false, true, false));
         moduleSpecification.addSystemDependency(
-                cdiDependency(new ModuleDependency(moduleLoader, "org.wildfly.template-dependency", false, false, true, false)));
+                cdiDependency(new ModuleDependency(moduleLoader, "org.wildfly.wildfly-grpc-dependency", false, false, true, false)));
     }
 
 

@@ -64,7 +64,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>template-dependency</artifactId>
+            <artifactId>wildfly-grpc-dependency</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>

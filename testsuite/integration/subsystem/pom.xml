@@ -31,13 +31,13 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>template-feature-pack</artifactId>
+            <artifactId>wildfly-grpc-feature-pack</artifactId>
             <type>pom</type>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>template-feature-pack</artifactId>
+            <artifactId>wildfly-grpc-feature-pack</artifactId>
             <type>zip</type>
             <exclusions>
                 <exclusion>
@@ -48,7 +48,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>template-dependency</artifactId>
+            <artifactId>wildfly-grpc-dependency</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -87,7 +87,7 @@
                                 </feature-pack>
                                 <feature-pack>
                                     <groupId>${project.groupId}</groupId>
-                                    <artifactId>template-feature-pack</artifactId>
+                                    <artifactId>wildfly-grpc-feature-pack</artifactId>
                                     <version>${project.version}</version>
                                     <inherit-packages>false</inherit-packages>
                                     <inherit-configs>false</inherit-configs>
@@ -105,8 +105,7 @@
                                         <layer>web-server</layer>
                                         <layer>jmx-remoting</layer>
                                         <!-- Layers from this FP  -->
-                                        <!-- TODO - rename to what you have called your layer -->
-                                        <layer>template-layer</layer>
+                                        <layer>wildfly-grpc-layer</layer>
                                     </layers>
                                 </config>
                             </configurations>

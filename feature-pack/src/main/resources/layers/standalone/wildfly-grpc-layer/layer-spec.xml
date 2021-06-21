@@ -14,16 +14,12 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<!--
-    TODO Replace 'template-layer' in both 'name' and the name of the directory
-    with the name of your layer
--->
-<layer-spec xmlns="urn:jboss:galleon:layer-spec:1.0" name="template-layer">
+<layer-spec xmlns="urn:jboss:galleon:layer-spec:1.0" name="wildfly-grpc-layer">
     <dependencies>
         <layer name="cdi"/>
     </dependencies>
 
-    <feature-group name="template-subsystem"/>
+    <feature-group name="wildfly-grpc-subsystem"/>
 
     <!--
     We already bring in our extension/subsystem module in /feature-pack/wildfly-feature-pack-build.xml since we are adding

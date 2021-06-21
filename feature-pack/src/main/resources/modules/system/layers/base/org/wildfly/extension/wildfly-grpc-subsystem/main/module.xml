@@ -14,14 +14,14 @@
   ~ limitations under the License.
   -->
 <!-- TODO Rename this module to something matching your chosen subsystem name -->
-<module xmlns="urn:jboss:module:1.9" name="org.wildfly.extension.template-subsystem">
+<module xmlns="urn:jboss:module:1.9" name="org.wildfly.extension.wildfly-grpc-subsystem">
     <properties>
         <property name="jboss.api" value="private"/>
     </properties>
 
     <resources>
         <!-- TODO Use the actual name of the subsystem artifact here -->
-        <artifact name="${org.wildfly.extras.grpc:template-subsystem}"/>
+        <artifact name="${org.wildfly.extras.grpc:wildfly-grpc-subsystem}"/>
     </resources>
 
     <dependencies>
@@ -37,6 +37,6 @@
             Additional module dependencies. If they contain any classes that should be exposed to the user's code,
             (e.g. in a deployment) make sure you add them in the subsystem's DependencyProcessor too
         -->
-        <module name="org.wildfly.template-dependency"/>
+        <module name="org.wildfly.wildfly-grpc-dependency"/>
     </dependencies>
 </module>

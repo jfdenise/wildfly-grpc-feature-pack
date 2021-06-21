@@ -155,7 +155,7 @@
             <!-- Project -->
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>template-dependency</artifactId>
+                <artifactId>wildfly-grpc-dependency</artifactId>
                 <version>${project.version}</version>
                 <exclusions>
                     <exclusion>
@@ -166,7 +166,7 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>template-subsystem</artifactId>
+                <artifactId>wildfly-grpc-subsystem</artifactId>
                 <version>${project.version}</version>
                 <exclusions>
                     <exclusion>
@@ -177,7 +177,7 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>template-feature-pack</artifactId>
+                <artifactId>wildfly-grpc-feature-pack</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
                 <exclusions>
@@ -189,7 +189,7 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>template-feature-pack</artifactId>
+                <artifactId>wildfly-grpc-feature-pack</artifactId>
                 <version>${project.version}</version>
                 <type>zip</type>
                 <exclusions>

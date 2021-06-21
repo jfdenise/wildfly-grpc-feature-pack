@@ -25,7 +25,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>template-subsystem</artifactId>
+    <artifactId>wildfly-grpc-subsystem</artifactId>
     <name>WildFly gRPC :: Subsystem</name>
 
     <dependencies>
