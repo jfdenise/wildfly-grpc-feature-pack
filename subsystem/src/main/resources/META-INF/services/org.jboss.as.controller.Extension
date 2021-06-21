@@ -15,4 +15,4 @@
 #
 
 # TODO This should match the fully qualified name of the renamed TemplateExtension class
-org.wildfly.extension.feature.pack.template.subsystem.GrpcExtension
+org.wildfly.extension.feature.pack.grpc.subsystem.GrpcExtension

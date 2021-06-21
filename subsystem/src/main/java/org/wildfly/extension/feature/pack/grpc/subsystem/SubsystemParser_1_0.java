@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.wildfly.extension.feature.pack.template.subsystem;
+package org.wildfly.extension.feature.pack.grpc.subsystem;
 
 import static org.jboss.as.controller.PersistentResourceXMLDescription.builder;
 

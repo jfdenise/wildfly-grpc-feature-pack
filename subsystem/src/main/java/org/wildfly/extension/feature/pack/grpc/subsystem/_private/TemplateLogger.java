@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.wildfly.extension.feature.pack.template.subsystem._private;
+package org.wildfly.extension.feature.pack.grpc.subsystem._private;
 
 import static org.jboss.logging.Logger.Level.INFO;
 

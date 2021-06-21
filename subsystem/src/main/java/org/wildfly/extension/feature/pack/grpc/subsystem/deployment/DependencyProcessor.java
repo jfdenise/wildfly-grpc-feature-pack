@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.wildfly.extension.feature.pack.template.subsystem.deployment;
+package org.wildfly.extension.feature.pack.grpc.subsystem.deployment;
 
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
