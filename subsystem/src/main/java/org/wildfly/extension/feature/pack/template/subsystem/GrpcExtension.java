@@ -34,7 +34,7 @@ import org.jboss.as.controller.registry.ManagementResourceRegistration;
  *
  * TODO Rename this class AND its package (and sub-packages) to something which makes sense
  */
-public class TemplateExtension implements Extension {
+public class GrpcExtension implements Extension {
 
     /**
      * The name of our subsystem within the model.
@@ -46,7 +46,7 @@ public class TemplateExtension implements Extension {
 
     static final String WELD_CAPABILITY_NAME = "org.wildfly.weld";
 
-    private static final String RESOURCE_NAME = TemplateExtension.class.getPackage().getName() + ".LocalDescriptions";
+    private static final String RESOURCE_NAME = GrpcExtension.class.getPackage().getName() + ".LocalDescriptions";
 
     protected static final ModelVersion VERSION_1_0_0 = ModelVersion.create(1, 0, 0);
     private static final ModelVersion CURRENT_MODEL_VERSION = VERSION_1_0_0;
@@ -66,7 +66,7 @@ public class TemplateExtension implements Extension {
             }
             prefix.append(kp);
         }
-        return new StandardResourceDescriptionResolver(prefix.toString(), RESOURCE_NAME, TemplateExtension.class.getClassLoader(), true, useUnprefixedChildTypes);
+        return new StandardResourceDescriptionResolver(prefix.toString(), RESOURCE_NAME, GrpcExtension.class.getClassLoader(), true, useUnprefixedChildTypes);
     }
 
 
@@ -74,7 +74,7 @@ public class TemplateExtension implements Extension {
     public void initialize(ExtensionContext extensionContext) {
         final SubsystemRegistration sr =  extensionContext.registerSubsystem(SUBSYSTEM_NAME, CURRENT_MODEL_VERSION);
         sr.registerXMLElementWriter(CURRENT_PARSER);
-        final ManagementResourceRegistration root = sr.registerSubsystemModel(new TemplateSubsystemDefinition());
+        final ManagementResourceRegistration root = sr.registerSubsystemModel(new GrpcSubsystemDefinition());
         root.registerOperationHandler(GenericSubsystemDescribeHandler.DEFINITION, GenericSubsystemDescribeHandler.INSTANCE, false);
     }
 

@@ -29,7 +29,7 @@ public class SubsystemParser_1_0 extends PersistentResourceXMLParser {
     // TODO Rename to something that makes sense and update the template-subsytem.xsd namespaces to match
     public static final String NAMESPACE = "urn:wildfly:wildfly-grpc-subsystem:1.0";
 
-    private static final PersistentResourceXMLDescription xmlDescription = builder(TemplateExtension.SUBSYSTEM_PATH, NAMESPACE)
+    private static final PersistentResourceXMLDescription xmlDescription = builder(GrpcExtension.SUBSYSTEM_PATH, NAMESPACE)
             .build();
 
     @Override

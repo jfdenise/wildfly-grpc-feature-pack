@@ -27,7 +27,7 @@ import org.jboss.as.subsystem.test.AdditionalInitialization;
 public class SubsystemTestCase extends AbstractSubsystemBaseTest {
 
     public SubsystemTestCase() {
-        super(TemplateExtension.SUBSYSTEM_NAME, new TemplateExtension());
+        super(GrpcExtension.SUBSYSTEM_NAME, new GrpcExtension());
     }
 
     @Override
@@ -42,7 +42,7 @@ public class SubsystemTestCase extends AbstractSubsystemBaseTest {
     }
 
     protected AdditionalInitialization createAdditionalInitialization() {
-        return AdditionalInitialization.withCapabilities(TemplateExtension.WELD_CAPABILITY_NAME);
+        return AdditionalInitialization.withCapabilities(GrpcExtension.WELD_CAPABILITY_NAME);
     }
 
 }

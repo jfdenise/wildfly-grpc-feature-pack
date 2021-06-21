@@ -31,7 +31,7 @@ import org.jboss.logging.annotations.MessageLogger;
  * @author <a href="kkhan@redhat.com">Kabir Khan</a> (c) 2019 Red Hat inc.
  */
 // TODO Make the projectCode in the @MessageLogger annotation some abbreviation to identify your subsystem
-@MessageLogger(projectCode = "WFLYGPTMPL", length = 4)
+@MessageLogger(projectCode = "WFLYGRPC", length = 4)
 // TODO Rename to something that makes sense for your subsystem.
 public interface TemplateLogger extends BasicLogger {
 

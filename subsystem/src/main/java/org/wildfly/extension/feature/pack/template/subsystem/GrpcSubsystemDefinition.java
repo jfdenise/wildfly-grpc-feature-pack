@@ -18,7 +18,7 @@ package org.wildfly.extension.feature.pack.template.subsystem;
 
 import static org.jboss.as.controller.OperationContext.Stage.RUNTIME;
 import static org.jboss.as.server.deployment.Phase.DEPENDENCIES;
-import static org.wildfly.extension.feature.pack.template.subsystem.TemplateExtension.WELD_CAPABILITY_NAME;
+import static org.wildfly.extension.feature.pack.template.subsystem.GrpcExtension.WELD_CAPABILITY_NAME;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -41,21 +41,21 @@ import org.wildfly.extension.feature.pack.template.subsystem.deployment.Dependen
 /**
  * @author <a href="mailto:kabir.khan@jboss.com">Kabir Khan</a>
  */
-public class TemplateSubsystemDefinition extends PersistentResourceDefinition {
+public class GrpcSubsystemDefinition extends PersistentResourceDefinition {
 
     // TODO Change this to something that makes sense for your subsystem
-    private static final String TEMPLATE_SUBSYSTEM_CAPABILITY_NAME = "org.wildfly.extras.template";
+    private static final String GRPC_SUBSYSTEM_CAPABILITY_NAME = "org.wildfly.extras.grpc";
 
     private static final RuntimeCapability<Void> CONTEXT_PROPAGATION_CAPABILITY = RuntimeCapability.Builder
-            .of(TEMPLATE_SUBSYSTEM_CAPABILITY_NAME)
+            .of(GRPC_SUBSYSTEM_CAPABILITY_NAME)
             .addRequirements(WELD_CAPABILITY_NAME)
             .build();
 
-    public TemplateSubsystemDefinition() {
+    public GrpcSubsystemDefinition() {
         super(
                 new SimpleResourceDefinition.Parameters(
-                        TemplateExtension.SUBSYSTEM_PATH,
-                        TemplateExtension.getResourceDescriptionResolver(TemplateExtension.SUBSYSTEM_NAME))
+                        GrpcExtension.SUBSYSTEM_PATH,
+                        GrpcExtension.getResourceDescriptionResolver(GrpcExtension.SUBSYSTEM_NAME))
                 .setAddHandler(AddHandler.INSTANCE)
                 .setRemoveHandler(new ModelOnlyRemoveStepHandler())
                 .setCapabilities(CONTEXT_PROPAGATION_CAPABILITY)
@@ -97,7 +97,7 @@ public class TemplateSubsystemDefinition extends PersistentResourceDefinition {
             context.addStep(new AbstractDeploymentChainStep() {
                 public void execute(DeploymentProcessorTarget processorTarget) {
                     final int DEPENDENCIES_TEMPLATE = 6304;
-                    processorTarget.addDeploymentProcessor(TemplateExtension.SUBSYSTEM_NAME, DEPENDENCIES, DEPENDENCIES_TEMPLATE, new DependencyProcessor());
+                    processorTarget.addDeploymentProcessor(GrpcExtension.SUBSYSTEM_NAME, DEPENDENCIES, DEPENDENCIES_TEMPLATE, new DependencyProcessor());
                 }
             }, RUNTIME);
 
