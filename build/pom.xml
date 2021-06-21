@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2019 Red Hat, Inc.
+  ~ Copyright 2021 Red Hat, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -18,16 +18,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>wildfly-grpc-parent</artifactId>
         <groupId>org.wildfly.extras.grpc</groupId>
         <version>0.0.1</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
     <artifactId>wildfly-grpc-build</artifactId>
     <name>WildFly gRPC :: Build</name>
-
     <packaging>pom</packaging>
 
     <dependencies>
@@ -96,7 +95,6 @@
                                         <layer>jaxrs</layer>
                                         <layer>management</layer>
                                         <!-- Layers from this FP  -->
-                                        <!-- TODO - rename to what you have called your layer -->
                                         <layer>wildfly-grpc-layer</layer>
                                     </layers>
                                 </config>
@@ -136,5 +134,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

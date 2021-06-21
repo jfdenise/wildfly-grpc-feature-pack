@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2019 Red Hat, Inc.
+  ~ Copyright 2021 Red Hat, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -21,13 +21,12 @@
         <artifactId>jboss-parent</artifactId>
         <version>38</version>
     </parent>
+
     <groupId>org.wildfly.extras.grpc</groupId>
     <artifactId>wildfly-grpc-parent</artifactId>
     <version>0.0.1</version>
     <packaging>pom</packaging>
     <name>WildFly gRPC :: Parent</name>
-
-    <description>WildFly Galleon Pack Template</description>
 
     <licenses>
         <license>
@@ -36,6 +35,14 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
+    <scm>
+        <connection>scm:git:${wildfly-grpc.repo.scm.connection}</connection>
+        <developerConnection>scm:git:${wildfly-grpc.repo.scm.connection}</developerConnection>
+        <url>${wildfly-grpc.repo.scm.url}</url>
+        <tag>HEAD</tag>
+    </scm>
+
     <properties>
         <!--
             Target WildFly version, and other parts needed for the Galleon maven plugin
@@ -52,21 +59,17 @@
         -->
         <version.org.wildfly.common>1.5.4.Final</version.org.wildfly.common>
 
-
-
-
         <!-- Other dependency versions -->
         <version.org.jboss.arquillian.junit>1.6.0.Final</version.org.jboss.arquillian.junit>
         <version.org.jboss.galleon>4.2.8.Final</version.org.jboss.galleon>
-
 
         <!-- Plugin versions and their dependency versions -->
         <version.org.wildfly.checkstyle-config>1.0.8.Final</version.org.wildfly.checkstyle-config>
         <version.org.wildfly.galleon-plugins>4.2.8.Final</version.org.wildfly.galleon-plugins>
 
         <!-- Misc. -->
-        <wildfly-extras.repo.scm.connection>git@github.com:wildfly-extras/wildfly-galleon-pack-template.git</wildfly-extras.repo.scm.connection>
-        <wildfly-extras.repo.scm.url>https://github.com/wildfly-extras/wildfly-galleon-pack-template</wildfly-extras.repo.scm.url>
+        <wildfly-grpc.repo.scm.connection>git@github.com:hpehl/wildfly-grpc-feature-pack.git</wildfly-grpc.repo.scm.connection>
+        <wildfly-grpc.repo.scm.url>https://github.com/hpehl/wildfly-grpc-feature-pack</wildfly-grpc.repo.scm.url>
         <!-- Protocol to use for communication with remote maven repositories.
             You can set to 'http' if you are using a maven proxy and 'https'
             interferes with that. Use 'https' for builds that will be released
@@ -95,36 +98,16 @@
         <version.wildfly.maven.plugin>2.0.0.Final</version.wildfly.maven.plugin>
         <version.licenses-plugin>2.3.0.Final</version.licenses-plugin>
     </properties>
-    <repositories>
-        <repository>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </snapshots>
-            <id>jboss-public-repository-group</id>
-            <name>JBoss Public Repository Group</name>
-            <url>${maven.repository.url}</url>
-            <layout>default</layout>
-        </repository>
-        <repository>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </snapshots>
-            <id>jboss-enterprise-maven-repository</id>
-            <name>JBoss Enterprise Maven Repository</name>
-            <url>${maven.redhat.repository.url}</url>
-            <layout>default</layout>
-        </repository>
-    </repositories>
+
+    <modules>
+        <module>build</module>
+        <module>dependency</module>
+        <module>example</module>
+        <module>feature-pack</module>
+        <module>subsystem</module>
+        <module>testsuite</module>
+    </modules>
+
     <dependencyManagement>
         <dependencies>
             <!-- WildFly dependencies -->
@@ -149,8 +132,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
-
 
             <!-- Project -->
             <dependency>
@@ -200,8 +181,6 @@
                 </exclusions>
             </dependency>
 
-
-
             <!-- External dependencies -->
             <!-- This does not go into the modules so don't worry about exclusions -->
             <dependency>
@@ -209,8 +188,6 @@
                 <artifactId>wildfly-checkstyle-config</artifactId>
                 <version>${version.org.wildfly.checkstyle-config}</version>
             </dependency>
-
-
 
             <!-- Test dependencies -->
             <dependency>
@@ -221,6 +198,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
     <build>
         <pluginManagement>
             <plugins>
@@ -290,11 +268,12 @@
                         <includeTestSourceDirectory>true</includeTestSourceDirectory>
                         <excludes>**/*$logger.java,**/*$bundle.java</excludes>
                         <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
-                        <useFile></useFile>
+                        <useFile/>
                     </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -302,20 +281,6 @@
             </plugin>
         </plugins>
     </build>
-    <scm>
-        <connection>scm:git:${wildfly-extras.repo.scm.connection}</connection>
-        <developerConnection>scm:git:${wildfly-extras.repo.scm.connection}</developerConnection>
-        <url>${wildfly-extras.repo.scm.url}</url>
-        <tag>HEAD</tag>
-    </scm>
-    <modules>
-        <module>build</module>
-        <module>dependency</module>
-        <module>example</module>
-        <module>feature-pack</module>
-        <module>subsystem</module>
-        <module>testsuite</module>
-    </modules>
 
     <profiles>
         <profile>
@@ -331,4 +296,35 @@
             </properties>
         </profile>
     </profiles>
+
+    <repositories>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Repository Group</name>
+            <url>${maven.repository.url}</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+            <id>jboss-enterprise-maven-repository</id>
+            <name>JBoss Enterprise Maven Repository</name>
+            <url>${maven.redhat.repository.url}</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
 </project>

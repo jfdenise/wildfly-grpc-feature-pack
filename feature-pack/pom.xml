@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2019 Red Hat, Inc.
+  ~ Copyright 2021 Red Hat, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -18,22 +18,61 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>wildfly-grpc-parent</artifactId>
         <groupId>org.wildfly.extras.grpc</groupId>
         <version>0.0.1</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
     <artifactId>wildfly-grpc-feature-pack</artifactId>
-    <packaging>pom</packaging>
-
     <name>WildFly gRPC :: Galleon Pack</name>
+    <packaging>pom</packaging>
 
     <properties>
         <license.output.directory>${project.build.directory}/resources/content/docs/licenses</license.output.directory>
         <license.src.directory>${basedir}/src/license</license.src.directory>
     </properties>
+
+    <dependencies>
+        <!-- Other feature pack dependencies -->
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-galleon-pack</artifactId>
+            <version>${version.org.wildfly}</version>
+            <type>zip</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly.galleon-plugins</groupId>
+            <artifactId>wildfly-galleon-plugins</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+
+        <!-- module and copy artifact dependencies -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>wildfly-grpc-dependency</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>wildfly-grpc-subsystem</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!--
+
+                <dependency>
+                    <groupId>org.wildfly</groupId>
+                    <artifactId>wildfly-feature-pack-galleon-content</artifactId>
+                    <version>${version.org.wildfly}</version>
+                    <type>pom</type>
+                    <scope>provided</scope>
+                </dependency>
+        -->
+
+    </dependencies>
 
     <build>
         <finalName>${server.name}</finalName>
@@ -103,7 +142,6 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <sortByGroupIdAndArtifactId>true</sortByGroupIdAndArtifactId>
-                            <!-- TODO Give these the same name as you changed the xml to -->
                             <licensesConfigFile>src/license/wildfly-grpc-feature-pack-licenses.xml</licensesConfigFile>
                             <licensesOutputFile>${license.output.directory}/wildfly-grpc-feature-pack-licenses.xml</licensesOutputFile>
                         </configuration>
@@ -112,43 +150,4 @@
             </plugin>
         </plugins>
     </build>
-    <dependencies>
-        <!-- Other feature pack dependencies -->
-        <dependency>
-            <groupId>org.wildfly</groupId>
-            <artifactId>wildfly-galleon-pack</artifactId>
-            <version>${version.org.wildfly}</version>
-            <type>zip</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.wildfly.galleon-plugins</groupId>
-            <artifactId>wildfly-galleon-plugins</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-
-        <!-- module and copy artifact dependencies -->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>wildfly-grpc-dependency</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>wildfly-grpc-subsystem</artifactId>
-            <scope>provided</scope>
-        </dependency>
-<!--
-
-        <dependency>
-            <groupId>org.wildfly</groupId>
-            <artifactId>wildfly-feature-pack-galleon-content</artifactId>
-            <version>${version.org.wildfly}</version>
-            <type>pom</type>
-            <scope>provided</scope>
-        </dependency>
--->
-
-    </dependencies>
 </project>
