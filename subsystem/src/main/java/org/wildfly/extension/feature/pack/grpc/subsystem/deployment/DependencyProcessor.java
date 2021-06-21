@@ -56,7 +56,6 @@ public class DependencyProcessor implements DeploymentUnitProcessor {
                 cdiDependency(new ModuleDependency(moduleLoader, "org.wildfly.wildfly-grpc-dependency", false, false, true, false)));
     }
 
-
     private ModuleDependency cdiDependency(ModuleDependency moduleDependency) {
         // This is needed following https://issues.redhat.com/browse/WFLY-13641 / https://github.com/wildfly/wildfly/pull/13406
         moduleDependency.addImportFilter(s -> s.equals("META-INF"), true);
