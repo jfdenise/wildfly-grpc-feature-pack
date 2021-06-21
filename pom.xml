@@ -82,7 +82,7 @@
         <maven.redhat.repository.url>${maven.repository.protocol}://maven.repository.redhat.com/ga/</maven.redhat.repository.url>
 
         <!-- Name of the built server -->
-        <server.name>wildfly-${version.org.wildfly}-template-${project.version}</server.name>
+        <server.name>wildfly-${version.org.wildfly}-grpc-${project.version}</server.name>
         <wildfly.build.output.dir>build/target/${server.name}</wildfly.build.output.dir>
 
         <!-- Galleon -->

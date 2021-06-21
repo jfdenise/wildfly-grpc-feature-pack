@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.wildfly.extension.feature.pack.grpc.subsystem.deployment;
 
 import org.jboss.as.server.deployment.Attachments;
@@ -34,7 +33,6 @@ public class DependencyProcessor implements DeploymentUnitProcessor {
     @Override
     public void deploy(DeploymentPhaseContext phaseContext) {
         DeploymentUnit deploymentUnit = phaseContext.getDeploymentUnit();
-
         addModuleDependencies(deploymentUnit);
     }
 

@@ -13,20 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.wildfly.extension.feature.pack.grpc.subsystem;
-
-import static org.jboss.as.controller.PersistentResourceXMLDescription.builder;
 
 import org.jboss.as.controller.PersistentResourceXMLDescription;
 import org.jboss.as.controller.PersistentResourceXMLParser;
+
+import static org.jboss.as.controller.PersistentResourceXMLDescription.builder;
 
 /**
  * @author <a href="mailto:kabir.khan@jboss.com">Kabir Khan</a>
  */
 public class SubsystemParser_1_0 extends PersistentResourceXMLParser {
 
-    // TODO Rename to something that makes sense and update the template-subsytem.xsd namespaces to match
     public static final String NAMESPACE = "urn:wildfly:wildfly-grpc-subsystem:1.0";
 
     private static final PersistentResourceXMLDescription xmlDescription = builder(GrpcExtension.SUBSYSTEM_PATH, NAMESPACE)
@@ -36,5 +34,4 @@ public class SubsystemParser_1_0 extends PersistentResourceXMLParser {
     public PersistentResourceXMLDescription getParserDescription() {
         return xmlDescription;
     }
-
 }

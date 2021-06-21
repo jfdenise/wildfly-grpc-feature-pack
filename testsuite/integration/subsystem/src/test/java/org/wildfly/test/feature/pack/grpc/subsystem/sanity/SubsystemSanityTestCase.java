@@ -13,10 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.wildfly.test.feature.pack.template.subsystem.sanity;
-
-import javax.inject.Inject;
+package org.wildfly.test.feature.pack.grpc.subsystem.sanity;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -26,8 +23,10 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.wildfly.feature.pack.template.dependency.ExampleQualifier;
-import org.wildfly.feature.pack.template.dependency.Message;
+import org.wildfly.feature.pack.grpc.dependency.ExampleQualifier;
+import org.wildfly.feature.pack.grpc.dependency.Message;
+
+import javax.inject.Inject;
 
 /**
  * @author <a href="mailto:kabir.khan@jboss.com">Kabir Khan</a>

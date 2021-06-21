@@ -1,4 +1,4 @@
-package org.wildfly.feature.pack.template.dependency;
+package org.wildfly.feature.pack.grpc.dependency;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

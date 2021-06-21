@@ -1,4 +1,4 @@
-package org.wildfly.feature.pack.template.dependency;
+package org.wildfly.feature.pack.grpc.dependency;
 
 /**
  * @author <a href="mailto:kabir.khan@jboss.com">Kabir Khan</a>

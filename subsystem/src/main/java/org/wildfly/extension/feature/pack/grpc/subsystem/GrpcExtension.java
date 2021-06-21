@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.wildfly.extension.feature.pack.grpc.subsystem;
 
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUBSYSTEM;
@@ -82,5 +81,4 @@ public class GrpcExtension implements Extension {
     public void initializeParsers(ExtensionParsingContext extensionParsingContext) {
         extensionParsingContext.setSubsystemXmlMapping(SUBSYSTEM_NAME, SubsystemParser_1_0.NAMESPACE, CURRENT_PARSER);
     }
-
 }

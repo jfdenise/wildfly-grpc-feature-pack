@@ -1,12 +1,12 @@
-package org.wildfly.extension.feature.pack.template.example;
+package org.wildfly.extension.feature.pack.grpc.example;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
-import org.wildfly.feature.pack.template.dependency.ExampleQualifier;
-import org.wildfly.feature.pack.template.dependency.Message;
+import org.wildfly.feature.pack.grpc.dependency.ExampleQualifier;
+import org.wildfly.feature.pack.grpc.dependency.Message;
 
 /**
  * @author <a href="mailto:kabir.khan@jboss.com">Kabir Khan</a>

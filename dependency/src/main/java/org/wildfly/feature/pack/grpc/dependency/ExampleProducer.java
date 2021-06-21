@@ -1,4 +1,4 @@
-package org.wildfly.feature.pack.template.dependency;
+package org.wildfly.feature.pack.grpc.dependency;
 
 import java.util.Arrays;
 import java.util.Collections;
