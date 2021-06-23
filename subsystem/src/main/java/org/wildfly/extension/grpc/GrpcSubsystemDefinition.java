@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wildfly.extension.feature.pack.grpc.subsystem;
+package org.wildfly.extension.grpc;
 
 import static org.jboss.as.controller.OperationContext.Stage.RUNTIME;
 import static org.jboss.as.server.deployment.Phase.DEPENDENCIES;
-import static org.wildfly.extension.feature.pack.grpc.subsystem.GrpcExtension.WELD_CAPABILITY_NAME;
+import static org.wildfly.extension.grpc.GrpcExtension.WELD_CAPABILITY_NAME;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -34,8 +34,8 @@ import org.jboss.as.controller.registry.ManagementResourceRegistration;
 import org.jboss.as.server.AbstractDeploymentChainStep;
 import org.jboss.as.server.DeploymentProcessorTarget;
 import org.jboss.dmr.ModelNode;
-import org.wildfly.extension.feature.pack.grpc.subsystem._private.TemplateLogger;
-import org.wildfly.extension.feature.pack.grpc.subsystem.deployment.DependencyProcessor;
+import org.wildfly.extension.grpc._private.TemplateLogger;
+import org.wildfly.extension.grpc.deployment.DependencyProcessor;
 
 /**
  * @author <a href="mailto:kabir.khan@jboss.com">Kabir Khan</a>

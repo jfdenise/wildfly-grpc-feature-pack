@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wildfly.extension.feature.pack.grpc.subsystem.deployment;
+package org.wildfly.extension.grpc.deployment;
 
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
@@ -51,9 +51,13 @@ public class DependencyProcessor implements DeploymentUnitProcessor {
         // TODO use the name of the modules after renaming, and add any other dependencies
         // In this case we don't need any classes from the subsystem module itself so we don't need to add it to the
         // deployment's module dependencies
-        // moduleSpecification.addSystemDependency(new ModuleDependency(moduleLoader, "org.wildfly.extension.wildfly-grpc-subsystem", false, false, true, false));
-        moduleSpecification.addSystemDependency(
-                cdiDependency(new ModuleDependency(moduleLoader, "org.wildfly.wildfly-grpc-dependency", false, false, true, false)));
+        // moduleSpecification.addSystemDependency(new ModuleDependency(moduleLoader, "org.wildfly.extension.grpc", false, false, true, false));
+        moduleSpecification.addSystemDependency(cdiDependency(new ModuleDependency(moduleLoader,
+                "org.wildfly.grpc-dependency",
+                false,
+                false,
+                true,
+                false)));
     }
 
     private ModuleDependency cdiDependency(ModuleDependency moduleDependency) {

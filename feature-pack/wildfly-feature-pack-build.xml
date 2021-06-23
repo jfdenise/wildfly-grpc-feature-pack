@@ -40,7 +40,7 @@
     <generate-feature-specs>
         <extensions>
             <standalone>
-                <extension>org.wildfly.extension.wildfly-grpc-subsystem</extension>
+                <extension>org.wildfly.extension.grpc</extension>
             </standalone>
         </extensions>
     </generate-feature-specs>

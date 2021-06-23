@@ -13,7 +13,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<module xmlns="urn:jboss:module:1.9" name="org.wildfly.extension.wildfly-grpc-subsystem">
+<module xmlns="urn:jboss:module:1.9" name="org.wildfly.extension.grpc">
     <properties>
         <property name="jboss.api" value="private"/>
     </properties>
@@ -35,6 +35,6 @@
             Additional module dependencies. If they contain any classes that should be exposed to the user's code,
             (e.g. in a deployment) make sure you add them in the subsystem's DependencyProcessor too
         -->
-        <module name="org.wildfly.wildfly-grpc-dependency"/>
+        <module name="org.wildfly.grpc-dependency"/>
     </dependencies>
 </module>

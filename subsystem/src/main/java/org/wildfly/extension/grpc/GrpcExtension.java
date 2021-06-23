@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wildfly.extension.feature.pack.grpc.subsystem;
+package org.wildfly.extension.grpc;
 
 import org.jboss.as.controller.Extension;
 import org.jboss.as.controller.ExtensionContext;

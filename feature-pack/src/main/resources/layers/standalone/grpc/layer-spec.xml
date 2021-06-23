@@ -14,12 +14,12 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<layer-spec xmlns="urn:jboss:galleon:layer-spec:1.0" name="wildfly-grpc-layer">
+<layer-spec xmlns="urn:jboss:galleon:layer-spec:1.0" name="grpc">
     <dependencies>
         <layer name="cdi"/>
     </dependencies>
 
-    <feature-group name="wildfly-grpc-subsystem"/>
+    <feature-group name="grpc"/>
 
     <!--
     We already bring in our extension/subsystem module in /feature-pack/wildfly-feature-pack-build.xml since we are adding

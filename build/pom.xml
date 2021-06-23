@@ -95,7 +95,7 @@
                                         <layer>jaxrs</layer>
                                         <layer>management</layer>
                                         <!-- Layers from this FP  -->
-                                        <layer>wildfly-grpc-layer</layer>
+                                        <layer>grpc</layer>
                                     </layers>
                                 </config>
                             </configurations>

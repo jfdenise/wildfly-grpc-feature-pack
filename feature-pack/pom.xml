@@ -26,7 +26,7 @@
     </parent>
 
     <artifactId>wildfly-grpc-feature-pack</artifactId>
-    <name>WildFly gRPC :: Galleon Pack</name>
+    <name>WildFly gRPC :: Feature Pack</name>
     <packaging>pom</packaging>
 
     <properties>
@@ -42,13 +42,11 @@
             <version>${version.org.wildfly}</version>
             <type>zip</type>
         </dependency>
-
         <dependency>
             <groupId>org.wildfly.galleon-plugins</groupId>
             <artifactId>wildfly-galleon-plugins</artifactId>
             <scope>provided</scope>
         </dependency>
-
 
         <!-- module and copy artifact dependencies -->
         <dependency>
@@ -62,7 +60,6 @@
             <scope>provided</scope>
         </dependency>
         <!--
-
                 <dependency>
                     <groupId>org.wildfly</groupId>
                     <artifactId>wildfly-feature-pack-galleon-content</artifactId>
@@ -118,7 +115,7 @@
                 <version>${version.org.wildfly.galleon-plugins}</version>
                 <executions>
                     <execution>
-                        <id>wildfly-wildfly-grpc-feature-pack-build</id>
+                        <id>wildfly-grpc-feature-pack-build</id>
                         <goals>
                             <goal>build-feature-pack</goal>
                         </goals>
@@ -142,8 +139,8 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <sortByGroupIdAndArtifactId>true</sortByGroupIdAndArtifactId>
-                            <licensesConfigFile>src/license/wildfly-grpc-feature-pack-licenses.xml</licensesConfigFile>
-                            <licensesOutputFile>${license.output.directory}/wildfly-grpc-feature-pack-licenses.xml</licensesOutputFile>
+                            <licensesConfigFile>src/license/grpc-licenses.xml</licensesConfigFile>
+                            <licensesOutputFile>${license.output.directory}/grpc-licenses.xml</licensesOutputFile>
                         </configuration>
                     </execution>
                 </executions>

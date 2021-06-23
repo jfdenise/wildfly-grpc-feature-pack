@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wildfly.extension.feature.pack.grpc.subsystem._private;
+package org.wildfly.extension.grpc._private;
 
 import static org.jboss.logging.Logger.Level.INFO;
 
@@ -24,16 +24,10 @@ import org.jboss.logging.annotations.LogMessage;
 import org.jboss.logging.annotations.Message;
 import org.jboss.logging.annotations.MessageLogger;
 
-/**
- * Log messages for our grpc subsystem.
- *
- * @author <a href="kkhan@redhat.com">Kabir Khan</a> (c) 2019 Red Hat inc.
- */
 @MessageLogger(projectCode = "WFLYGRPC", length = 4)
-// TODO Rename to something that makes sense for your subsystem.
 public interface TemplateLogger extends BasicLogger {
 
-    TemplateLogger LOGGER = Logger.getMessageLogger(TemplateLogger.class, "org.wildfly.extension.galleon.pack.grpc.subsystem");
+    TemplateLogger LOGGER = Logger.getMessageLogger(TemplateLogger.class, "org.wildfly.extension.grpc");
 
     /**
      * Logs an informational message indicating the subsystem is being activated.

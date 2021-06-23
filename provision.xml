@@ -15,7 +15,6 @@
   ~ limitations under the License.
   -->
 
-
 <!--
     USAGE:
         /path/to/galleon/bin/galleon.sh provision /path/to/this/provision.xml -dir=/path/to/created/wildfly/install/dir
@@ -42,7 +41,7 @@
             <include name="cloud-profile"/>
 
             <!-- Our layer(s) -->
-            <include name="wildfly-grpc-layer"/>
+            <include name="grpc"/>
         </layers>
     </config>
     <options>

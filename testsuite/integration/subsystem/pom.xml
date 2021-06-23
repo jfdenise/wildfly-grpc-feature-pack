@@ -105,7 +105,7 @@
                                         <layer>web-server</layer>
                                         <layer>jmx-remoting</layer>
                                         <!-- Layers from this FP  -->
-                                        <layer>wildfly-grpc-layer</layer>
+                                        <layer>grpc</layer>
                                     </layers>
                                 </config>
                             </configurations>

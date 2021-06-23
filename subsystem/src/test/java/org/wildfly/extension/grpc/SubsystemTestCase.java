@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.wildfly.extension.feature.pack.grpc.subsystem;
+package org.wildfly.extension.grpc;
 
 import java.io.IOException;
 
