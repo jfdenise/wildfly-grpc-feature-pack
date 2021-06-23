@@ -15,5 +15,5 @@
   ~ limitations under the License.
   -->
 <feature-group-spec name="wildfly-grpc-subsystem" xmlns="urn:jboss:galleon:feature-group:1.0">
-    <feature spec="subsystem.wildfly-grpc-subsystem"/>
+    <feature spec="subsystem.grpc"/>
 </feature-group-spec>

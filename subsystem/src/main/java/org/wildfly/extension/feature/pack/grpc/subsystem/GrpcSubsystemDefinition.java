@@ -42,7 +42,6 @@ import org.wildfly.extension.feature.pack.grpc.subsystem.deployment.DependencyPr
  */
 public class GrpcSubsystemDefinition extends PersistentResourceDefinition {
 
-    // TODO Change this to something that makes sense for your subsystem
     private static final String GRPC_SUBSYSTEM_CAPABILITY_NAME = "org.wildfly.extras.grpc";
 
     private static final RuntimeCapability<Void> CONTEXT_PROPAGATION_CAPABILITY = RuntimeCapability.Builder

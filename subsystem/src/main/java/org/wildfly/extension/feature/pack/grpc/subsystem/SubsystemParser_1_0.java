@@ -25,7 +25,7 @@ import static org.jboss.as.controller.PersistentResourceXMLDescription.builder;
  */
 public class SubsystemParser_1_0 extends PersistentResourceXMLParser {
 
-    public static final String NAMESPACE = "urn:wildfly:wildfly-grpc-subsystem:1.0";
+    public static final String NAMESPACE = "urn:wildfly:grpc:1.0";
 
     private static final PersistentResourceXMLDescription xmlDescription = builder(GrpcExtension.SUBSYSTEM_PATH, NAMESPACE)
             .build();

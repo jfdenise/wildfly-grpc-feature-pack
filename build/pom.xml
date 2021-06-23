@@ -90,7 +90,7 @@
                                     <layers>
                                         <!--
                                             Layers needed to have a base server that makes sense,
-                                            which are not required by this FP's layers
+                                            which are not required by this FPs layers
                                         -->
                                         <layer>jaxrs</layer>
                                         <layer>management</layer>

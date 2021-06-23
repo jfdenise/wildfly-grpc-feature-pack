@@ -14,8 +14,8 @@
   ~ limitations under the License.
   -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace="urn:wildfly:wildfly-grpc-subsystem:1.0"
-           xmlns="urn:wildfly:wildfly-grpc-subsystem:1.0"
+           targetNamespace="urn:wildfly:grpc:1.0"
+           xmlns="urn:wildfly:grpc:1.0"
            elementFormDefault="qualified"
            attributeFormDefault="unqualified"
            version="1.0">

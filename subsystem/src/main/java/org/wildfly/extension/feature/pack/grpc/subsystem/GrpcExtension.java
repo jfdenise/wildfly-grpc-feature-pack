@@ -15,8 +15,6 @@
  */
 package org.wildfly.extension.feature.pack.grpc.subsystem;
 
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUBSYSTEM;
-
 import org.jboss.as.controller.Extension;
 import org.jboss.as.controller.ExtensionContext;
 import org.jboss.as.controller.ModelVersion;
@@ -28,18 +26,17 @@ import org.jboss.as.controller.operations.common.GenericSubsystemDescribeHandler
 import org.jboss.as.controller.parsing.ExtensionParsingContext;
 import org.jboss.as.controller.registry.ManagementResourceRegistration;
 
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUBSYSTEM;
+
 /**
  * @author <a href="mailto:kabir.khan@jboss.com">Kabir Khan</a>
- *
- * TODO Rename this class AND its package (and sub-packages) to something which makes sense
  */
 public class GrpcExtension implements Extension {
 
     /**
      * The name of our subsystem within the model.
-     * TODO Rename it to your subsystem name
      */
-    public static final String SUBSYSTEM_NAME = "wildfly-grpc-subsystem";
+    public static final String SUBSYSTEM_NAME = "grpc";
 
     protected static final PathElement SUBSYSTEM_PATH = PathElement.pathElement(SUBSYSTEM, SUBSYSTEM_NAME);
 
@@ -54,13 +51,12 @@ public class GrpcExtension implements Extension {
 
     static ResourceDescriptionResolver getResourceDescriptionResolver(final String... keyPrefix) {
         return getResourceDescriptionResolver(true, keyPrefix);
-
     }
 
     static ResourceDescriptionResolver getResourceDescriptionResolver(final boolean useUnprefixedChildTypes, final String... keyPrefix) {
         StringBuilder prefix = new StringBuilder();
         for (String kp : keyPrefix) {
-            if (prefix.length() > 0){
+            if (prefix.length() > 0) {
                 prefix.append('.');
             }
             prefix.append(kp);
@@ -68,10 +64,9 @@ public class GrpcExtension implements Extension {
         return new StandardResourceDescriptionResolver(prefix.toString(), RESOURCE_NAME, GrpcExtension.class.getClassLoader(), true, useUnprefixedChildTypes);
     }
 
-
     @Override
     public void initialize(ExtensionContext extensionContext) {
-        final SubsystemRegistration sr =  extensionContext.registerSubsystem(SUBSYSTEM_NAME, CURRENT_MODEL_VERSION);
+        final SubsystemRegistration sr = extensionContext.registerSubsystem(SUBSYSTEM_NAME, CURRENT_MODEL_VERSION);
         sr.registerXMLElementWriter(CURRENT_PARSER);
         final ManagementResourceRegistration root = sr.registerSubsystemModel(new GrpcSubsystemDefinition());
         root.registerOperationHandler(GenericSubsystemDescribeHandler.DEFINITION, GenericSubsystemDescribeHandler.INSTANCE, false);
