@@ -28,9 +28,6 @@ import org.jboss.as.controller.registry.ManagementResourceRegistration;
 
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUBSYSTEM;
 
-/**
- * @author <a href="mailto:kabir.khan@jboss.com">Kabir Khan</a>
- */
 public class GrpcExtension implements Extension {
 
     /**
@@ -49,6 +46,19 @@ public class GrpcExtension implements Extension {
 
     private static final SubsystemParser_1_0 CURRENT_PARSER = new SubsystemParser_1_0();
 
+    @Override
+    public void initialize(ExtensionContext extensionContext) {
+        final SubsystemRegistration sr = extensionContext.registerSubsystem(SUBSYSTEM_NAME, CURRENT_MODEL_VERSION);
+        sr.registerXMLElementWriter(CURRENT_PARSER);
+        final ManagementResourceRegistration root = sr.registerSubsystemModel(new GrpcSubsystemDefinition());
+        root.registerOperationHandler(GenericSubsystemDescribeHandler.DEFINITION, GenericSubsystemDescribeHandler.INSTANCE, false);
+    }
+
+    @Override
+    public void initializeParsers(ExtensionParsingContext extensionParsingContext) {
+        extensionParsingContext.setSubsystemXmlMapping(SUBSYSTEM_NAME, SubsystemParser_1_0.NAMESPACE, CURRENT_PARSER);
+    }
+
     static ResourceDescriptionResolver getResourceDescriptionResolver(final String... keyPrefix) {
         return getResourceDescriptionResolver(true, keyPrefix);
     }
@@ -62,18 +72,5 @@ public class GrpcExtension implements Extension {
             prefix.append(kp);
         }
         return new StandardResourceDescriptionResolver(prefix.toString(), RESOURCE_NAME, GrpcExtension.class.getClassLoader(), true, useUnprefixedChildTypes);
-    }
-
-    @Override
-    public void initialize(ExtensionContext extensionContext) {
-        final SubsystemRegistration sr = extensionContext.registerSubsystem(SUBSYSTEM_NAME, CURRENT_MODEL_VERSION);
-        sr.registerXMLElementWriter(CURRENT_PARSER);
-        final ManagementResourceRegistration root = sr.registerSubsystemModel(new GrpcSubsystemDefinition());
-        root.registerOperationHandler(GenericSubsystemDescribeHandler.DEFINITION, GenericSubsystemDescribeHandler.INSTANCE, false);
-    }
-
-    @Override
-    public void initializeParsers(ExtensionParsingContext extensionParsingContext) {
-        extensionParsingContext.setSubsystemXmlMapping(SUBSYSTEM_NAME, SubsystemParser_1_0.NAMESPACE, CURRENT_PARSER);
     }
 }

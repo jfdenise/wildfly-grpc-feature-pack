@@ -20,9 +20,6 @@ import org.jboss.as.controller.PersistentResourceXMLParser;
 
 import static org.jboss.as.controller.PersistentResourceXMLDescription.builder;
 
-/**
- * @author <a href="mailto:kabir.khan@jboss.com">Kabir Khan</a>
- */
 public class SubsystemParser_1_0 extends PersistentResourceXMLParser {
 
     public static final String NAMESPACE = "urn:wildfly:grpc:1.0";
