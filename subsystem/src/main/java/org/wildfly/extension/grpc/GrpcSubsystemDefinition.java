@@ -37,12 +37,9 @@ import org.jboss.dmr.ModelNode;
 import org.wildfly.extension.grpc._private.TemplateLogger;
 import org.wildfly.extension.grpc.deployment.DependencyProcessor;
 
-/**
- * @author <a href="mailto:kabir.khan@jboss.com">Kabir Khan</a>
- */
 public class GrpcSubsystemDefinition extends PersistentResourceDefinition {
 
-    private static final String GRPC_SUBSYSTEM_CAPABILITY_NAME = "org.wildfly.extras.grpc";
+    private static final String GRPC_SUBSYSTEM_CAPABILITY_NAME = "org.wildfly.grpc";
 
     private static final RuntimeCapability<Void> CONTEXT_PROPAGATION_CAPABILITY = RuntimeCapability.Builder
             .of(GRPC_SUBSYSTEM_CAPABILITY_NAME)
