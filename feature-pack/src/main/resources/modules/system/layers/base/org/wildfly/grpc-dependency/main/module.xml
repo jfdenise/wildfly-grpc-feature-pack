@@ -20,13 +20,15 @@
 
     <resources>
         <artifact name="${org.wildfly.extras.grpc:wildfly-grpc-dependency}"/>
+        <artifact name="${io.grpc:grpc-api}"/>
+        <artifact name="${io.grpc:grpc-netty}"/>
         <artifact name="${io.grpc:grpc-protobuf}"/>
         <artifact name="${io.grpc:grpc-stub}"/>
         <artifact name="${com.google.protobuf:protobuf-java-util}"/>
     </resources>
 
     <dependencies>
-        <!-- We need these dependencies to trigger weld/CDI -->
+        <module name="java.logging"/>
         <module name="javax.enterprise.api"/>
         <module name="org.jboss.weld.api"/>
         <module name="org.jboss.weld.core"/>

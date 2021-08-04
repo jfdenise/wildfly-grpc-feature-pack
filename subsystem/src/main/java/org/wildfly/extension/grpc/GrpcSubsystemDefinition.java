@@ -15,13 +15,8 @@
  */
 package org.wildfly.extension.grpc;
 
-import static org.jboss.as.controller.OperationContext.Stage.RUNTIME;
-import static org.jboss.as.server.deployment.Phase.DEPENDENCIES;
-import static org.wildfly.extension.grpc.GrpcExtension.WELD_CAPABILITY_NAME;
-
-import java.util.Collection;
-import java.util.Collections;
-
+import io.grpc.Server;
+import io.grpc.ServerBuilder;
 import org.jboss.as.controller.AbstractBoottimeAddStepHandler;
 import org.jboss.as.controller.AttributeDefinition;
 import org.jboss.as.controller.ModelOnlyRemoveStepHandler;
@@ -36,6 +31,14 @@ import org.jboss.as.server.DeploymentProcessorTarget;
 import org.jboss.dmr.ModelNode;
 import org.wildfly.extension.grpc._private.TemplateLogger;
 import org.wildfly.extension.grpc.deployment.GrpcDependencyProcessor;
+
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+
+import static org.jboss.as.controller.OperationContext.Stage.RUNTIME;
+import static org.jboss.as.server.deployment.Phase.DEPENDENCIES;
+import static org.wildfly.extension.grpc.GrpcExtension.WELD_CAPABILITY_NAME;
 
 public class GrpcSubsystemDefinition extends PersistentResourceDefinition {
 
@@ -97,7 +100,20 @@ public class GrpcSubsystemDefinition extends PersistentResourceDefinition {
             }, RUNTIME);
 
             TemplateLogger.LOGGER.activatingSubsystem();
-            TemplateLogger.LOGGER.startingGrpcServer(5005);
+
+            startGrpcServer();
+        }
+
+        private void startGrpcServer() throws OperationFailedException {
+            try {
+                int port = 50051;
+                Server server = ServerBuilder.forPort(port)
+                        .build()
+                        .start();
+                TemplateLogger.LOGGER.startingGrpcServer("127.0.0.1:50051");
+            } catch (IOException e) {
+                throw new OperationFailedException("Unable to start gRPC server: " + e.getMessage(), e);
+            }
         }
     }
 }

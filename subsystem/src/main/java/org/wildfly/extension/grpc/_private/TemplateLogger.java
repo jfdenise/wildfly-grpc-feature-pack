@@ -37,8 +37,8 @@ public interface TemplateLogger extends BasicLogger {
     void activatingSubsystem();
 
     @LogMessage(level = INFO)
-    @Message(id = 2, value = "Starting gRPC server at port %d")
-    void startingGrpcServer(int port);
+    @Message(id = 2, value = "gRPC server listening at port %s")
+    void startingGrpcServer(String serverAndPort);
 
     @Message(id = 3, value = "Deployment %s requires use of the '%s' capability but it is not currently registered")
     DeploymentUnitProcessingException deploymentRequiresCapability(String deploymentName, String capabilityName);
