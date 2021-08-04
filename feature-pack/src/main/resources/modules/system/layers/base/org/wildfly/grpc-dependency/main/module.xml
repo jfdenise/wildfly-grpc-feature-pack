@@ -21,6 +21,8 @@
     <resources>
         <artifact name="${org.wildfly.extras.grpc:wildfly-grpc-dependency}"/>
         <artifact name="${io.grpc:grpc-api}"/>
+        <artifact name="${io.grpc:grpc-context}"/>
+        <artifact name="${io.grpc:grpc-core}"/>
         <artifact name="${io.grpc:grpc-netty}"/>
         <artifact name="${io.grpc:grpc-protobuf}"/>
         <artifact name="${io.grpc:grpc-stub}"/>
@@ -30,6 +32,8 @@
     <dependencies>
         <module name="java.logging"/>
         <module name="javax.enterprise.api"/>
+        <module name="com.google.guava"/>
+        <module name="io.netty"/>
         <module name="org.jboss.weld.api"/>
         <module name="org.jboss.weld.core"/>
         <module name="org.jboss.weld.spi"/>

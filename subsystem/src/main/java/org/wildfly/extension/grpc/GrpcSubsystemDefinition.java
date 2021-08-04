@@ -15,48 +15,35 @@
  */
 package org.wildfly.extension.grpc;
 
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
-import org.jboss.as.controller.AbstractBoottimeAddStepHandler;
 import org.jboss.as.controller.AttributeDefinition;
 import org.jboss.as.controller.ModelOnlyRemoveStepHandler;
-import org.jboss.as.controller.OperationContext;
-import org.jboss.as.controller.OperationFailedException;
 import org.jboss.as.controller.PersistentResourceDefinition;
 import org.jboss.as.controller.SimpleResourceDefinition;
 import org.jboss.as.controller.capability.RuntimeCapability;
 import org.jboss.as.controller.registry.ManagementResourceRegistration;
-import org.jboss.as.server.AbstractDeploymentChainStep;
-import org.jboss.as.server.DeploymentProcessorTarget;
-import org.jboss.dmr.ModelNode;
-import org.wildfly.extension.grpc._private.TemplateLogger;
-import org.wildfly.extension.grpc.deployment.GrpcDependencyProcessor;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 
-import static org.jboss.as.controller.OperationContext.Stage.RUNTIME;
-import static org.jboss.as.server.deployment.Phase.DEPENDENCIES;
 import static org.wildfly.extension.grpc.GrpcExtension.WELD_CAPABILITY_NAME;
 
 public class GrpcSubsystemDefinition extends PersistentResourceDefinition {
 
-    private static final String GRPC_SUBSYSTEM_CAPABILITY_NAME = "org.wildfly.grpc";
+    private static final String GRPC_CAPABILITY_NAME = "org.wildfly.grpc";
 
-    private static final RuntimeCapability<Void> CONTEXT_PROPAGATION_CAPABILITY = RuntimeCapability.Builder
-            .of(GRPC_SUBSYSTEM_CAPABILITY_NAME)
-            .addRequirements(WELD_CAPABILITY_NAME)
+    static final RuntimeCapability<Void> GRPC_CAPABILITY = RuntimeCapability.Builder
+            .of(GRPC_CAPABILITY_NAME, false, GrpcServerService.class)
             .build();
 
+    static final GrpcSubsystemDefinition INSTANCE = new GrpcSubsystemDefinition();
+
     public GrpcSubsystemDefinition() {
-        super(
-                new SimpleResourceDefinition.Parameters(
-                        GrpcExtension.SUBSYSTEM_PATH,
-                        GrpcExtension.getResourceDescriptionResolver(GrpcExtension.SUBSYSTEM_NAME))
-                .setAddHandler(AddHandler.INSTANCE)
+        super(new SimpleResourceDefinition.Parameters(
+                GrpcExtension.SUBSYSTEM_PATH,
+                GrpcExtension.getResourceDescriptionResolver(GrpcExtension.SUBSYSTEM_NAME))
+                .setAddHandler(GrpcSubsystemAdd.INSTANCE)
                 .setRemoveHandler(new ModelOnlyRemoveStepHandler())
-                .setCapabilities(CONTEXT_PROPAGATION_CAPABILITY)
+                .setCapabilities(GRPC_CAPABILITY)
         );
     }
 
@@ -78,42 +65,5 @@ public class GrpcSubsystemDefinition extends PersistentResourceDefinition {
                 RuntimePackageDependency.optional("my.optional.module"),
                 RuntimePackageDependency.passive("my.passive.module")
         );*/
-    }
-
-    static class AddHandler extends AbstractBoottimeAddStepHandler {
-
-        static AddHandler INSTANCE = new AddHandler();
-
-        private AddHandler() {
-            super(Collections.emptyList());
-        }
-
-        @Override
-        protected void performBoottime(OperationContext context, ModelNode operation, ModelNode model) throws OperationFailedException {
-            super.performBoottime(context, operation, model);
-
-            context.addStep(new AbstractDeploymentChainStep() {
-                public void execute(DeploymentProcessorTarget processorTarget) {
-                    final int DEPENDENCIES_TEMPLATE = 6304;
-                    processorTarget.addDeploymentProcessor(GrpcExtension.SUBSYSTEM_NAME, DEPENDENCIES, DEPENDENCIES_TEMPLATE, new GrpcDependencyProcessor());
-                }
-            }, RUNTIME);
-
-            TemplateLogger.LOGGER.activatingSubsystem();
-
-            startGrpcServer();
-        }
-
-        private void startGrpcServer() throws OperationFailedException {
-            try {
-                int port = 50051;
-                Server server = ServerBuilder.forPort(port)
-                        .build()
-                        .start();
-                TemplateLogger.LOGGER.startingGrpcServer("127.0.0.1:50051");
-            } catch (IOException e) {
-                throw new OperationFailedException("Unable to start gRPC server: " + e.getMessage(), e);
-            }
-        }
     }
 }

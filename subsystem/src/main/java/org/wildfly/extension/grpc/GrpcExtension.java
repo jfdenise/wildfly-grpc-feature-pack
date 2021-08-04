@@ -25,7 +25,6 @@ import org.jboss.as.controller.descriptions.StandardResourceDescriptionResolver;
 import org.jboss.as.controller.operations.common.GenericSubsystemDescribeHandler;
 import org.jboss.as.controller.parsing.ExtensionParsingContext;
 import org.jboss.as.controller.registry.ManagementResourceRegistration;
-import org.jboss.logging.Logger;
 
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUBSYSTEM;
 
@@ -49,22 +48,31 @@ public class GrpcExtension implements Extension {
 
     @Override
     public void initialize(ExtensionContext extensionContext) {
-        final SubsystemRegistration sr = extensionContext.registerSubsystem(SUBSYSTEM_NAME, CURRENT_MODEL_VERSION);
+        SubsystemRegistration sr = extensionContext.registerSubsystem(SUBSYSTEM_NAME, CURRENT_MODEL_VERSION);
         sr.registerXMLElementWriter(CURRENT_PARSER);
-        final ManagementResourceRegistration root = sr.registerSubsystemModel(new GrpcSubsystemDefinition());
-        root.registerOperationHandler(GenericSubsystemDescribeHandler.DEFINITION, GenericSubsystemDescribeHandler.INSTANCE, false);
+        ManagementResourceRegistration root = sr.registerSubsystemModel(GrpcSubsystemDefinition.INSTANCE);
+        root.registerOperationHandler(
+                GenericSubsystemDescribeHandler.DEFINITION,
+                GenericSubsystemDescribeHandler.INSTANCE,
+                false
+        );
     }
 
     @Override
     public void initializeParsers(ExtensionParsingContext extensionParsingContext) {
-        extensionParsingContext.setSubsystemXmlMapping(SUBSYSTEM_NAME, SubsystemParser_1_0.NAMESPACE, CURRENT_PARSER);
+        extensionParsingContext.setSubsystemXmlMapping(
+                SUBSYSTEM_NAME,
+                SubsystemParser_1_0.NAMESPACE,
+                CURRENT_PARSER
+        );
     }
 
     static ResourceDescriptionResolver getResourceDescriptionResolver(final String... keyPrefix) {
         return getResourceDescriptionResolver(true, keyPrefix);
     }
 
-    static ResourceDescriptionResolver getResourceDescriptionResolver(final boolean useUnprefixedChildTypes, final String... keyPrefix) {
+    static ResourceDescriptionResolver getResourceDescriptionResolver(final boolean useUnprefixedChildTypes,
+                                                                      final String... keyPrefix) {
         StringBuilder prefix = new StringBuilder();
         for (String kp : keyPrefix) {
             if (prefix.length() > 0) {
@@ -72,6 +80,12 @@ public class GrpcExtension implements Extension {
             }
             prefix.append(kp);
         }
-        return new StandardResourceDescriptionResolver(prefix.toString(), RESOURCE_NAME, GrpcExtension.class.getClassLoader(), true, useUnprefixedChildTypes);
+        return new StandardResourceDescriptionResolver(
+                prefix.toString(),
+                RESOURCE_NAME,
+                GrpcExtension.class.getClassLoader(),
+                true,
+                useUnprefixedChildTypes
+        );
     }
 }
