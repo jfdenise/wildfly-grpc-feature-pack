@@ -1,3 +1,3 @@
-# Wildfly gRPC 
+# WildFly gRPC 
 
 wip
