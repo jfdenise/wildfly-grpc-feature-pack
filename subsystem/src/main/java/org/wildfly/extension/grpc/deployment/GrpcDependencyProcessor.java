@@ -24,11 +24,7 @@ import org.jboss.as.server.deployment.module.ModuleSpecification;
 import org.jboss.modules.Module;
 import org.jboss.modules.ModuleLoader;
 
-/**
- * @author <a href="mailto:kabir.khan@jboss.com">Kabir Khan</a>
- */
-// TODO Rename this class to something which makes sense for your subsystem
-public class DependencyProcessor implements DeploymentUnitProcessor {
+public class GrpcDependencyProcessor implements DeploymentUnitProcessor {
 
     @Override
     public void deploy(DeploymentPhaseContext phaseContext) {

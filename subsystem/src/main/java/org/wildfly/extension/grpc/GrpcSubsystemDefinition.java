@@ -35,7 +35,7 @@ import org.jboss.as.server.AbstractDeploymentChainStep;
 import org.jboss.as.server.DeploymentProcessorTarget;
 import org.jboss.dmr.ModelNode;
 import org.wildfly.extension.grpc._private.TemplateLogger;
-import org.wildfly.extension.grpc.deployment.DependencyProcessor;
+import org.wildfly.extension.grpc.deployment.GrpcDependencyProcessor;
 
 public class GrpcSubsystemDefinition extends PersistentResourceDefinition {
 
@@ -92,11 +92,12 @@ public class GrpcSubsystemDefinition extends PersistentResourceDefinition {
             context.addStep(new AbstractDeploymentChainStep() {
                 public void execute(DeploymentProcessorTarget processorTarget) {
                     final int DEPENDENCIES_TEMPLATE = 6304;
-                    processorTarget.addDeploymentProcessor(GrpcExtension.SUBSYSTEM_NAME, DEPENDENCIES, DEPENDENCIES_TEMPLATE, new DependencyProcessor());
+                    processorTarget.addDeploymentProcessor(GrpcExtension.SUBSYSTEM_NAME, DEPENDENCIES, DEPENDENCIES_TEMPLATE, new GrpcDependencyProcessor());
                 }
             }, RUNTIME);
 
             TemplateLogger.LOGGER.activatingSubsystem();
+            TemplateLogger.LOGGER.startingGrpcServer(5005);
         }
     }
 }

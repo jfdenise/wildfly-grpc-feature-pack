@@ -67,6 +67,10 @@
         <version.org.wildfly.checkstyle-config>1.0.8.Final</version.org.wildfly.checkstyle-config>
         <version.org.wildfly.galleon-plugins>4.2.8.Final</version.org.wildfly.galleon-plugins>
 
+        <!-- gRPC & Protobuf versions -->
+        <version.io.grpc>1.39.0</version.io.grpc>
+        <version.com.google.protobuf>4.0.0-rc-2</version.com.google.protobuf>
+
         <!-- Misc. -->
         <wildfly-grpc.repo.scm.connection>git@github.com:hpehl/wildfly-grpc-feature-pack.git</wildfly-grpc.repo.scm.connection>
         <wildfly-grpc.repo.scm.url>https://github.com/hpehl/wildfly-grpc-feature-pack</wildfly-grpc.repo.scm.url>
@@ -179,6 +183,22 @@
                         <artifactId>*</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+
+            <!-- gRPC dependencies -->
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-bom</artifactId>
+                <version>${version.io.grpc}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-bom</artifactId>
+                <version>${version.com.google.protobuf}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
             <!-- External dependencies -->
