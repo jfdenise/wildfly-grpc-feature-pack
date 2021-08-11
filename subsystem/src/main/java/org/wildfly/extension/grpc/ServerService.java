@@ -15,16 +15,20 @@
  */
 package org.wildfly.extension.grpc;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import io.grpc.Server;
+import io.grpc.ServerBuilder;
 import org.jboss.as.network.ManagedBinding;
 import org.jboss.as.network.NetworkUtils;
 import org.jboss.as.network.SocketBinding;
 import org.jboss.as.server.deployment.DelegatingSupplier;
 import org.jboss.msc.Service;
 import org.jboss.msc.service.StartContext;
+import org.jboss.msc.service.StartException;
 import org.jboss.msc.service.StopContext;
 import org.wildfly.extension.grpc._private.GrpcLogger;
 
@@ -34,6 +38,7 @@ public class ServerService implements Service {
     private final Supplier<GrpcService> grpcService;
     private final String name;
     private final DelegatingSupplier<SocketBinding> binding;
+    private Server server;
 
     public ServerService(Consumer<ServerService> serverConsumer, Supplier<GrpcService> grpcService,
             String name) {
@@ -44,13 +49,21 @@ public class ServerService implements Service {
     }
 
     @Override
-    public void start(StartContext startContext) {
+    public void start(StartContext context) {
         GrpcLogger.LOGGER.serverStarting(name);
 
         InetSocketAddress socketAddress = binding.get().getSocketAddress();
         GrpcLogger.LOGGER.serverListening(name, NetworkUtils.formatIPAddressForURI(socketAddress.getAddress()),
                 socketAddress.getPort());
-        // TODO Start gRPC server
+
+        // TODO Start gRPC server asynchronously!
+        try {
+            server = ServerBuilder.forPort(socketAddress.getPort())
+                    .build()
+                    .start();
+        } catch (IOException e) {
+            context.failed(new StartException("Unable to start gRPC server: " + e.getMessage(), e));
+        }
 
         grpcService.get().registerServer(this);
         binding.get().getSocketBindings().getNamedRegistry().registerBinding(new ListenerBinding(binding.get()));
@@ -61,7 +74,9 @@ public class ServerService implements Service {
     public void stop(StopContext stopContext) {
         GrpcLogger.LOGGER.serverStopping(name);
 
-        // TODO Stop gRPC server
+        if (server != null) {
+            server.shutdown();
+        }
 
         serverConsumer.accept(null);
         binding.get().getSocketBindings().getNamedRegistry().unregisterBinding(binding.get().getName());
