@@ -15,35 +15,36 @@
  */
 package org.wildfly.extension.grpc._private;
 
-import static org.jboss.logging.Logger.Level.INFO;
-
-import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 import org.jboss.logging.BasicLogger;
 import org.jboss.logging.Logger;
 import org.jboss.logging.annotations.LogMessage;
 import org.jboss.logging.annotations.Message;
 import org.jboss.logging.annotations.MessageLogger;
 
+import static org.jboss.logging.Logger.Level.INFO;
+
 @MessageLogger(projectCode = "WFLYGRPC", length = 4)
 public interface GrpcLogger extends BasicLogger {
 
     GrpcLogger LOGGER = Logger.getMessageLogger(GrpcLogger.class, "org.wildfly.extension.grpc");
 
-    /**
-     * Logs an informational message indicating the subsystem is being activated.
-     */
     @LogMessage(level = INFO)
-    @Message(id = 1, value = "Activating gRPC subsystem")
-    void activatingSubsystem();
+    @Message(id = 1, value = "gRPC service starting")
+    void grpcStarting();
 
     @LogMessage(level = INFO)
-    @Message(id = 3, value = "gRPC server listening on %s:%d")
-    void serverListening(String address, int port);
+    @Message(id = 2, value = "gRPC service stopping")
+    void grpcStopping();
 
     @LogMessage(level = INFO)
-    @Message(id = 4, value = "gRPC server stopping")
-    void serverStopping();
+    @Message(id = 3, value = "gRPC Server %s starting")
+    void serverStarting(String name);
 
-    @Message(id = 5, value = "Deployment %s requires use of the '%s' capability but it is not currently registered")
-    DeploymentUnitProcessingException deploymentRequiresCapability(String deploymentName, String capabilityName);
+    @LogMessage(level = INFO)
+    @Message(id = 4, value = "gRPC server %s stopping")
+    void serverStopping(String name);
+
+    @LogMessage(level = INFO)
+    @Message(id = 5, value = "gRPC server %s listening on %s:%d")
+    void serverListening(String name, String address, int port);
 }

@@ -21,6 +21,23 @@
            version="1.0">
 
     <!-- The subsystem root element -->
-    <xs:element name="subsystem">
-    </xs:element>
+    <xs:element name="subsystem" type="grpc-subsystemType"/>
+
+    <xs:complexType name="grpc-subsystemType">
+        <xs:annotation>
+            <xs:documentation>
+                <![CDATA[
+                The configuration of the gRPC subsystem.
+            ]]>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="server" type="serverType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="serverType">
+        <xs:attribute name="name" use="required" type="xs:string"/>
+        <xs:attribute name="socket-binding" use="required" type="xs:string"/>
+    </xs:complexType>
 </xs:schema>

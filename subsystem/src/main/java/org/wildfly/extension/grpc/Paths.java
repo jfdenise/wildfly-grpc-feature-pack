@@ -15,20 +15,12 @@
  */
 package org.wildfly.extension.grpc;
 
-import org.jboss.as.controller.PersistentResourceXMLDescription;
-import org.jboss.as.controller.PersistentResourceXMLParser;
+import org.jboss.as.controller.PathElement;
 
-import static org.jboss.as.controller.PersistentResourceXMLDescription.builder;
+import static org.wildfly.extension.grpc.GrpcExtension.SUBSYSTEM_NAME;
 
-public class SubsystemParser_1_0 extends PersistentResourceXMLParser {
+public interface Paths {
 
-    public static final String NAMESPACE = "urn:wildfly:grpc:1.0";
-
-    private static final PersistentResourceXMLDescription xmlDescription = builder(GrpcExtension.SUBSYSTEM_PATH, NAMESPACE)
-            .build();
-
-    @Override
-    public PersistentResourceXMLDescription getParserDescription() {
-        return xmlDescription;
-    }
+    PathElement SUBSYSTEM_PATH = PathElement.pathElement(Constants.SUBSYSTEM, SUBSYSTEM_NAME);
+    PathElement SERVER_PATH = PathElement.pathElement(Constants.SERVER);
 }

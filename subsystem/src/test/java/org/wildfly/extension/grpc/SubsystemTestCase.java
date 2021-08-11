@@ -32,16 +32,16 @@ public class SubsystemTestCase extends AbstractSubsystemBaseTest {
 
     @Override
     protected String getSubsystemXml() throws IOException {
-        //test configuration put in standalone.xml
+        // test configuration put in standalone.xml
         return readResource("grpc-subsystem-test.xml");
     }
 
     @Override
-    protected String getSubsystemXsdPath() throws Exception {
+    protected String getSubsystemXsdPath() {
         return "schema/grpc-subsystem_1_0.xsd";
     }
 
     protected AdditionalInitialization createAdditionalInitialization() {
-        return AdditionalInitialization.withCapabilities(GrpcExtension.WELD_CAPABILITY_NAME);
+        return AdditionalInitialization.withCapabilities(Capabilities.REF_WELD);
     }
 }

@@ -18,33 +18,29 @@ package org.wildfly.extension.grpc;
 import org.jboss.as.controller.Extension;
 import org.jboss.as.controller.ExtensionContext;
 import org.jboss.as.controller.ModelVersion;
-import org.jboss.as.controller.PathElement;
 import org.jboss.as.controller.SubsystemRegistration;
-import org.jboss.as.controller.descriptions.ResourceDescriptionResolver;
 import org.jboss.as.controller.descriptions.StandardResourceDescriptionResolver;
 import org.jboss.as.controller.operations.common.GenericSubsystemDescribeHandler;
 import org.jboss.as.controller.parsing.ExtensionParsingContext;
 import org.jboss.as.controller.registry.ManagementResourceRegistration;
 
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUBSYSTEM;
-
 public class GrpcExtension implements Extension {
 
-    /**
-     * The name of our subsystem within the model.
-     */
     public static final String SUBSYSTEM_NAME = "grpc";
-
-    protected static final PathElement SUBSYSTEM_PATH = PathElement.pathElement(SUBSYSTEM, SUBSYSTEM_NAME);
-
-    static final String WELD_CAPABILITY_NAME = "org.wildfly.weld";
+    public static final ModelVersion VERSION_1_0_0 = ModelVersion.create(1, 0, 0);
+    public static final ModelVersion CURRENT_MODEL_VERSION = VERSION_1_0_0;
 
     private static final String RESOURCE_NAME = GrpcExtension.class.getPackage().getName() + ".LocalDescriptions";
+    private static final GrpcSubsystemParser_1_0 CURRENT_PARSER = new GrpcSubsystemParser_1_0();
 
-    protected static final ModelVersion VERSION_1_0_0 = ModelVersion.create(1, 0, 0);
-    private static final ModelVersion CURRENT_MODEL_VERSION = VERSION_1_0_0;
-
-    private static final SubsystemParser_1_0 CURRENT_PARSER = new SubsystemParser_1_0();
+    static StandardResourceDescriptionResolver getResolver(final String... keyPrefix) {
+        StringBuilder prefix = new StringBuilder(SUBSYSTEM_NAME);
+        for (String kp : keyPrefix) {
+            prefix.append('.').append(kp);
+        }
+        return new StandardResourceDescriptionResolver(prefix.toString(), RESOURCE_NAME,
+                GrpcExtension.class.getClassLoader(), true, false);
+    }
 
     @Override
     public void initialize(ExtensionContext extensionContext) {
@@ -62,30 +58,8 @@ public class GrpcExtension implements Extension {
     public void initializeParsers(ExtensionParsingContext extensionParsingContext) {
         extensionParsingContext.setSubsystemXmlMapping(
                 SUBSYSTEM_NAME,
-                SubsystemParser_1_0.NAMESPACE,
+                GrpcSubsystemParser_1_0.NAMESPACE,
                 CURRENT_PARSER
-        );
-    }
-
-    static ResourceDescriptionResolver getResourceDescriptionResolver(final String... keyPrefix) {
-        return getResourceDescriptionResolver(true, keyPrefix);
-    }
-
-    static ResourceDescriptionResolver getResourceDescriptionResolver(final boolean useUnprefixedChildTypes,
-                                                                      final String... keyPrefix) {
-        StringBuilder prefix = new StringBuilder();
-        for (String kp : keyPrefix) {
-            if (prefix.length() > 0) {
-                prefix.append('.');
-            }
-            prefix.append(kp);
-        }
-        return new StandardResourceDescriptionResolver(
-                prefix.toString(),
-                RESOURCE_NAME,
-                GrpcExtension.class.getClassLoader(),
-                true,
-                useUnprefixedChildTypes
         );
     }
 }
