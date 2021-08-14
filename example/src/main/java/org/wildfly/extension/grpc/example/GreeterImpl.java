@@ -1,4 +1,4 @@
-package org.wildfly.extension.grpc._demo;
+package org.wildfly.extension.grpc.example;
 
 import io.grpc.stub.StreamObserver;
 

@@ -29,45 +29,83 @@
     <name>WildFly gRPC :: Example</name>
     <packaging>war</packaging>
 
+    <properties>
+        <os-maven-plugin.version>1.7.0</os-maven-plugin.version>
+        <protobuf-maven-plugin.version>0.6.1</protobuf-maven-plugin.version>
+    </properties>
+
     <dependencies>
         <dependency>
-            <groupId>jakarta.enterprise</groupId>
-            <artifactId>jakarta.enterprise.cdi-api</artifactId>
-            <scope>provided</scope>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>jakarta.inject</groupId>
-            <artifactId>jakarta.inject-api</artifactId>
-            <scope>provided</scope>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-context</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jboss.logging</groupId>
-            <artifactId>jboss-logging-annotations</artifactId>
-            <scope>provided</scope>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jboss.logging</groupId>
-            <artifactId>jboss-logging-processor</artifactId>
-            <!--
-                This is a compile-time dependency of this project, but is not needed at compile or runtime by other
-                projects that depend on this project.
-            -->
-            <scope>provided</scope>
-            <optional>true</optional>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-protobuf</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jboss.spec.javax.ws.rs</groupId>
-            <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
-            <scope>provided</scope>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-protobuf-lite</artifactId>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>wildfly-grpc-dependency</artifactId>
-            <scope>provided</scope>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-stub</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <scope>provided</scope> <!-- not needed at runtime -->
         </dependency>
     </dependencies>
 
     <build>
         <finalName>example</finalName>
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>${os-maven-plugin.version}</version>
+            </extension>
+        </extensions>
+        <plugins>
+            <plugin>
+                <groupId>org.xolstice.maven.plugins</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>${protobuf-maven-plugin.version}</version>
+                <configuration>
+                    <pluginId>grpc-java</pluginId>
+                    <protocArtifact>
+                        com.google.protobuf:protoc:${version.com.google.protobuf}:exe:${os.detected.classifier}
+                    </protocArtifact>
+                    <pluginArtifact>
+                        io.grpc:protoc-gen-grpc-java:${version.io.grpc}:exe:${os.detected.classifier}
+                    </pluginArtifact>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>compile-custom</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 </project>

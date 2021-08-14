@@ -23,4 +23,5 @@
 <suppressions>
     <!-- Ignore files pulled down from zanata -->
     <suppress files="LocalDescriptions_.+\.properties|.*\.i18n_.+\.properties" checks=".*"/>
+    <suppress files=".*/protobuf/.*" checks=".*"/>
 </suppressions>

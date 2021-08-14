@@ -30,7 +30,6 @@ import org.jboss.msc.Service;
 import org.jboss.msc.service.StartContext;
 import org.jboss.msc.service.StartException;
 import org.jboss.msc.service.StopContext;
-import org.wildfly.extension.grpc._demo.GreeterImpl;
 import org.wildfly.extension.grpc._private.GrpcLogger;
 
 public class ServerService implements Service {
@@ -60,7 +59,6 @@ public class ServerService implements Service {
         // TODO Start gRPC server asynchronously!
         try {
             server = ServerBuilder.forPort(socketAddress.getPort())
-                    .addService(new GreeterImpl())
                     .build()
                     .start();
         } catch (IOException e) {
