@@ -47,4 +47,12 @@ public interface GrpcLogger extends BasicLogger {
     @LogMessage(level = INFO)
     @Message(id = 5, value = "gRPC server %s listening on %s:%d")
     void serverListening(String name, String address, int port);
+
+    @LogMessage(level = INFO)
+    @Message(id = 6, value = "gRPC service %s registered")
+    void registerService(String name);
+
+    @LogMessage(level = INFO)
+    @Message(id = 7, value = "gRPC service %s unregistered")
+    void unregisterService(String name);
 }

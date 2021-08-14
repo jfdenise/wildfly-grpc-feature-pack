@@ -25,8 +25,11 @@
         <artifact name="${io.grpc:grpc-core}"/>
         <artifact name="${io.grpc:grpc-netty}"/>
         <artifact name="${io.grpc:grpc-protobuf}"/>
+        <artifact name="${io.grpc:grpc-protobuf-lite}"/>
         <artifact name="${io.grpc:grpc-stub}"/>
+        <artifact name="${com.google.protobuf:protobuf-java}"/>
         <artifact name="${com.google.protobuf:protobuf-java-util}"/>
+        <artifact name="${io.perfmark:perfmark-api}"/>
     </resources>
 
     <dependencies>

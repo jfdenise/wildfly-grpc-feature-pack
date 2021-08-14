@@ -26,6 +26,7 @@ import org.jboss.as.server.DeploymentProcessorTarget;
 import org.jboss.as.server.deployment.Phase;
 import org.jboss.dmr.ModelNode;
 import org.wildfly.extension.grpc.deployment.GrpcDependencyProcessor;
+import org.wildfly.extension.grpc.deployment.GrpcDeploymentProcessor;
 
 import static org.wildfly.extension.grpc.GrpcSubsystemDefinition.GRPC_CAPABILITY;
 
@@ -45,9 +46,13 @@ class GrpcSubsystemAdd extends AbstractBoottimeAddStepHandler {
 
         context.addStep(new AbstractDeploymentChainStep() {
             public void execute(DeploymentProcessorTarget processorTarget) {
-                int DEPENDENCIES_TEMPLATE = 6304;
+                int DEPENDENCIES_PRIORITY = 6304;
                 processorTarget.addDeploymentProcessor(GrpcExtension.SUBSYSTEM_NAME, Phase.DEPENDENCIES,
-                        DEPENDENCIES_TEMPLATE, new GrpcDependencyProcessor());
+                        DEPENDENCIES_PRIORITY, new GrpcDependencyProcessor());
+
+                int DEPLOYMENT_PRIORITY = 6305;
+                processorTarget.addDeploymentProcessor(GrpcExtension.SUBSYSTEM_NAME, Phase.DEPENDENCIES,
+                        DEPLOYMENT_PRIORITY, new GrpcDeploymentProcessor());
             }
         }, OperationContext.Stage.RUNTIME);
     }
