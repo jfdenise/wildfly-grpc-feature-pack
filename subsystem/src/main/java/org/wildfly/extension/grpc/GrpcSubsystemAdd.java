@@ -41,7 +41,8 @@ class GrpcSubsystemAdd extends AbstractBoottimeAddStepHandler {
 
         CapabilityServiceBuilder<?> csb = context.getCapabilityServiceTarget().addCapability(GRPC_CAPABILITY);
         Consumer<GrpcService> consumer = csb.provides(GRPC_CAPABILITY, ServiceNames.GRPC);
-        csb.setInstance(new GrpcService(consumer));
+        GrpcService grpcService = new GrpcService(consumer);
+        csb.setInstance(grpcService);
         csb.install();
 
         context.addStep(new AbstractDeploymentChainStep() {
@@ -52,7 +53,7 @@ class GrpcSubsystemAdd extends AbstractBoottimeAddStepHandler {
 
                 int DEPLOYMENT_PRIORITY = 6305;
                 processorTarget.addDeploymentProcessor(GrpcExtension.SUBSYSTEM_NAME, Phase.DEPENDENCIES,
-                        DEPLOYMENT_PRIORITY, new GrpcDeploymentProcessor());
+                        DEPLOYMENT_PRIORITY, new GrpcDeploymentProcessor(grpcService));
             }
         }, OperationContext.Stage.RUNTIME);
     }

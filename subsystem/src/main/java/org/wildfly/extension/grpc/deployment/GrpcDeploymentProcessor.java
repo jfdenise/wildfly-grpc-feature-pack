@@ -15,22 +15,51 @@
  */
 package org.wildfly.extension.grpc.deployment;
 
+import java.util.List;
+
+import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessor;
+import org.jboss.as.server.deployment.annotation.CompositeIndex;
+import org.jboss.jandex.AnnotationInstance;
+import org.jboss.jandex.ClassInfo;
+import org.jboss.jandex.DotName;
+import org.wildfly.extension.grpc.GrpcService;
 import org.wildfly.extension.grpc._private.GrpcLogger;
 
 public class GrpcDeploymentProcessor implements DeploymentUnitProcessor {
 
+    static final DotName GRPC_SERVICE = DotName.createSimple("org.wildfly.grpc.GrpcService");
+
+    private final GrpcService grpcService;
+
+    public GrpcDeploymentProcessor(final GrpcService grpcService) {
+        this.grpcService = grpcService;
+    }
+
     @Override
     public void deploy(DeploymentPhaseContext phaseContext) {
         DeploymentUnit deploymentUnit = phaseContext.getDeploymentUnit();
-        String name = deploymentUnit.getName();
-        GrpcLogger.LOGGER.registerService(name);
+        CompositeIndex compositeIndex = deploymentUnit.getAttachment(Attachments.COMPOSITE_ANNOTATION_INDEX);
+        if (compositeIndex.getAnnotations(GRPC_SERVICE).isEmpty()) {
+            return;
+        }
+
+        List<AnnotationInstance> grpcServices = compositeIndex.getAnnotations(GRPC_SERVICE);
+        if (grpcServices != null) {
+            for (AnnotationInstance annotationInstance : grpcServices) {
+                if (annotationInstance.target() instanceof ClassInfo) {
+                    ClassInfo clazz = (ClassInfo) annotationInstance.target();
+                    GrpcLogger.LOGGER.registerService(clazz.name().toString());
+                    // TODO Start gRPC server and register services
+                }
+            }
+        }
     }
 
     @Override
     public void undeploy(DeploymentUnit context) {
-        GrpcLogger.LOGGER.registerService(context.getName());
+        // TODO Stop and remove server
     }
 }
