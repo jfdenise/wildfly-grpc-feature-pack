@@ -4,24 +4,24 @@ Feature pack to bring gRPC support to WildFly.
 
 ## Get Started
 
-To build the feature pack, simply clone this repository, and on your command line go to the checkout folder and run
+To build the feature pack, simply run
 
 ```shell
 mvn install
 ```
 
-This will build everything, and run the testsuite. An WildFly server with the gRPC subsystem will be created in
+This will build everything, and run the testsuite. A WildFly server with the gRPC subsystem will be created in
 the `build/target` directory.
 
 ## Deploy Example
 
 The `example` folder contains the 'Hello World' example from
-the [gRPC Java examples](https://github.com/grpc/grpc-java/tree/master/examples) repository.
+the [gRPC Java examples](https://github.com/grpc/grpc-java/tree/master/examples).
 
 Start the server by running
 
 ```shell
-./build/target/wildfly-<wildfly-version>-grpc-0.0.1/bin/standalone.sh
+./build/target/wildfly-<wildfly-version>-grpc-<wildfly-grpc-version>/bin/standalone.sh
 ```
 
 In another terminal window run:
