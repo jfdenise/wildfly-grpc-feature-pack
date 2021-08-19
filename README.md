@@ -37,7 +37,7 @@ or [gRPCurl](https://github.com/fullstorydev/grpcurl) to invoke the deployed 'He
 
 ```shell
 grpcurl \
-  -proto example/src/main/proto/helloworld.proto \ 
-  -plaintext -d '{"name":"Bob"}' \ 
+  -proto example/src/main/proto/helloworld.proto \
+  -plaintext -d '{"name":"Bob"}' \
   localhost:9555 helloworld.Greeter/SayHello
 ```
