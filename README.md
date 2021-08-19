@@ -33,4 +33,11 @@ mvn package wildfly:deploy -pl example
 and see the application gets deployed.
 
 You can use tools like [BloomRPC](https://github.com/uw-labs/bloomrpc)
-or [gRPCurl](https://github.com/fullstorydev/grpcurl) to invoke the deployed 'Hello World' gRPC service. 
+or [gRPCurl](https://github.com/fullstorydev/grpcurl) to invoke the deployed 'Hello World' gRPC service:
+
+```shell
+grpcurl \
+  -proto example/src/main/proto/helloworld.proto \ 
+  -plaintext -d '{"name":"Bob"}' \ 
+  localhost:9555 helloworld.Greeter/SayHello
+```
