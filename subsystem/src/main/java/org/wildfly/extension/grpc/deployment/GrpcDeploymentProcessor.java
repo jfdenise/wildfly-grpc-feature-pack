@@ -28,7 +28,6 @@ import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentResourceSupport;
 import org.jboss.as.server.deployment.DeploymentUnit;
-import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 import org.jboss.as.server.deployment.DeploymentUnitProcessor;
 import org.jboss.as.server.deployment.annotation.CompositeIndex;
 import org.jboss.dmr.ModelNode;
@@ -43,14 +42,13 @@ import org.wildfly.extension.grpc.Constants;
 import org.wildfly.extension.grpc.GrpcDeploymentService;
 import org.wildfly.extension.grpc.GrpcExtension;
 import org.wildfly.extension.grpc.GrpcSubsystemService;
-import org.wildfly.extension.grpc._private.GrpcLogger;
 
 public class GrpcDeploymentProcessor implements DeploymentUnitProcessor {
 
     static final DotName GRPC_SERVICE = DotName.createSimple("org.wildfly.grpc.GrpcService");
 
     @Override
-    public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
+    public void deploy(DeploymentPhaseContext phaseContext) {
         DeploymentUnit deploymentUnit = phaseContext.getDeploymentUnit();
         CompositeIndex compositeIndex = deploymentUnit.getAttachment(Attachments.COMPOSITE_ANNOTATION_INDEX);
         if (compositeIndex.getAnnotations(GRPC_SERVICE).isEmpty()) {
@@ -63,9 +61,6 @@ public class GrpcDeploymentProcessor implements DeploymentUnitProcessor {
         }
 
         Module module = deploymentUnit.getAttachment(Attachments.MODULE);
-        if (module == null) {
-            throw new DeploymentUnitProcessingException("No module!");
-        }
         ClassLoader classLoader = module.getClassLoader();
         Map<String, String> serviceClasses = serviceAnnotations.stream()
                 .filter(annotationInstance -> annotationInstance.target() instanceof ClassInfo)
@@ -77,34 +72,24 @@ public class GrpcDeploymentProcessor implements DeploymentUnitProcessor {
 
         // install service
         ServiceTarget serviceTarget = phaseContext.getServiceTarget();
-        ServiceName deploymentServiceName = GrpcSubsystemService.deploymentServiceName(deploymentUnit.getServiceName());
+        ServiceName deploymentServiceName = GrpcDeploymentService.deploymentServiceName(
+                deploymentUnit.getServiceName());
         ServiceBuilder<?> serviceBuilder = serviceTarget.addService(deploymentServiceName);
         Consumer<GrpcDeploymentService> deploymentServiceConsumer = serviceBuilder.provides(deploymentServiceName);
         Supplier<GrpcSubsystemService> subsystemServiceSupplier = serviceBuilder.requires(
                 GrpcSubsystemService.SERVICE_NAME);
         Supplier<ExecutorService> executorSupplier = Services.requireServerExecutor(serviceBuilder);
-
-        GrpcDeploymentService deploymentService = new GrpcDeploymentService(deploymentServiceConsumer,
+        GrpcDeploymentService deploymentService = new GrpcDeploymentService(deploymentUnit.getName(),
+                deploymentServiceConsumer,
                 subsystemServiceSupplier,
                 executorSupplier,
-                deploymentUnit.getName(),
                 serviceClasses,
                 classLoader);
         serviceBuilder.setInstance(deploymentService);
         serviceBuilder.install();
 
-        List<AnnotationInstance> grpcServiceAnnotations = compositeIndex.getAnnotations(GRPC_SERVICE);
-        if (grpcServiceAnnotations != null) {
-            Map<String, String> grpcServiceClasses = grpcServiceAnnotations.stream()
-                    .filter(annotationInstance -> annotationInstance.target() instanceof ClassInfo)
-                    .map(annotationInstance -> (ClassInfo) annotationInstance.target())
-                    .collect(Collectors.toMap(
-                            ClassInfo::simpleName,
-                            clazz -> clazz.name().toString()
-                    ));
-            // TODO Start gRPC server and register service(s)
-            processManagement(deploymentUnit, grpcServiceClasses);
-        }
+        // add management resources
+        processManagement(deploymentUnit, serviceClasses);
     }
 
     private void processManagement(DeploymentUnit deploymentUnit, Map<String, String> grpcServiceClasses) {
@@ -115,12 +100,10 @@ public class GrpcDeploymentProcessor implements DeploymentUnitProcessor {
             ModelNode serviceModel = drs.getDeploymentSubModel(GrpcExtension.SUBSYSTEM_NAME,
                     PathElement.pathElement(Constants.GRPC_SERVICE, entry.getKey()));
             serviceModel.get(Constants.SERVICE_CLASS).set(entry.getValue());
-            GrpcLogger.LOGGER.registerService(entry.getValue());
         }
     }
 
     @Override
     public void undeploy(DeploymentUnit context) {
-        // TODO Stop and remove server
     }
 }

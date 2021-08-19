@@ -25,33 +25,43 @@ import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import org.jboss.msc.Service;
+import org.jboss.msc.service.ServiceName;
 import org.jboss.msc.service.StartContext;
 import org.jboss.msc.service.StartException;
 import org.jboss.msc.service.StopContext;
 import org.wildfly.extension.grpc._private.GrpcLogger;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 public class GrpcDeploymentService implements Service {
 
-    private static final int PORT = 9555;
+    public static final ServiceName GRPC_DEPLOYMENT = ServiceName.of("grpc-deployment");
+    private static final long SHUTDOWN_TIMEOUT = 3; // seconds
+    private static final String HOST = "127.0.0.1"; // TODO make configurable
+    private static final int PORT = 9555; // TODO make configurable
 
+    public static ServiceName deploymentServiceName(ServiceName deploymentServiceName) {
+        return deploymentServiceName.append(GRPC_DEPLOYMENT);
+    }
+
+    private final String name;
     private final Consumer<GrpcDeploymentService> deploymentService;
     private final Supplier<GrpcSubsystemService> subsystemService;
     private final Supplier<ExecutorService> executorService;
-    private final String name;
     private final Map<String, String> serviceClasses;
     private final ClassLoader classLoader;
     private Server server;
 
-    public GrpcDeploymentService(Consumer<GrpcDeploymentService> deploymentService,
+    public GrpcDeploymentService(String name,
+            Consumer<GrpcDeploymentService> deploymentService,
             Supplier<GrpcSubsystemService> subsystemService,
             Supplier<ExecutorService> executorService,
-            String name,
             Map<String, String> serviceClasses,
             ClassLoader classLoader) {
+        this.name = name;
         this.deploymentService = deploymentService;
         this.subsystemService = subsystemService;
         this.executorService = executorService;
-        this.name = name;
         this.serviceClasses = serviceClasses;
         this.classLoader = classLoader;
     }
@@ -72,15 +82,13 @@ public class GrpcDeploymentService implements Service {
 
     private void startServer()
             throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-
+        GrpcLogger.LOGGER.serverListening(name, HOST, PORT);
         ServerBuilder<?> serverBuilder = ServerBuilder.forPort(PORT);
         for (String serviceClass : serviceClasses.values()) {
             serverBuilder.addService(newService(serviceClass));
             GrpcLogger.LOGGER.registerService(serviceClass);
         }
         server = serverBuilder.build().start();
-        GrpcLogger.LOGGER.serverStarting(name);
-        GrpcLogger.LOGGER.serverListening(name, "127.0.0.1", PORT);
     }
 
     @SuppressWarnings("deprecation")
@@ -95,17 +103,19 @@ public class GrpcDeploymentService implements Service {
     }
 
     @Override
-    public void stop(StopContext stopContext) {
+    public void stop(StopContext context) {
         GrpcLogger.LOGGER.serverStopping(name);
-
         if (server != null) {
-            server.shutdown();
+            stopServer();
         }
-
         deploymentService.accept(null);
     }
 
-    public Consumer<GrpcDeploymentService> getDeploymentService() {
-        return deploymentService;
+    private void stopServer() {
+        try {
+            server.shutdown().awaitTermination(SHUTDOWN_TIMEOUT, SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -9,11 +9,6 @@ import org.wildfly.extension.grpc._private.GrpcLogger;
 public class GrpcSubsystemService implements Service {
 
     public static final ServiceName SERVICE_NAME = ServiceName.of("io.grpc.server");
-    public static final ServiceName GRPC_DEPLOYMENT = ServiceName.of("grpc-deployment");
-
-    public static ServiceName deploymentServiceName(ServiceName deploymentServiceName) {
-        return deploymentServiceName.append(GRPC_DEPLOYMENT);
-    }
 
     GrpcSubsystemService() {
     }

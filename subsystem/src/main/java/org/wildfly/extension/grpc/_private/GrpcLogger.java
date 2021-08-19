@@ -37,22 +37,14 @@ public interface GrpcLogger extends BasicLogger {
     void grpcStopping();
 
     @LogMessage(level = INFO)
-    @Message(id = 3, value = "gRPC Server %s starting")
-    void serverStarting(String name);
-
-    @LogMessage(level = INFO)
-    @Message(id = 4, value = "gRPC server %s stopping")
-    void serverStopping(String name);
-
-    @LogMessage(level = INFO)
-    @Message(id = 5, value = "gRPC server %s listening on %s:%d")
+    @Message(id = 3, value = "gRPC server for %s listening on %s:%d")
     void serverListening(String name, String address, int port);
 
     @LogMessage(level = INFO)
-    @Message(id = 6, value = "gRPC service %s registered")
-    void registerService(String name);
+    @Message(id = 4, value = "gRPC server for %s stopping")
+    void serverStopping(String name);
 
     @LogMessage(level = INFO)
-    @Message(id = 7, value = "gRPC service %s unregistered")
-    void unregisterService(String name);
+    @Message(id = 5, value = "gRPC service %s registered")
+    void registerService(String name);
 }
