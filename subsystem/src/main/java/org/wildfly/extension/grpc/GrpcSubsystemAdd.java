@@ -15,45 +15,38 @@
  */
 package org.wildfly.extension.grpc;
 
-import java.util.function.Consumer;
-
 import org.jboss.as.controller.AbstractBoottimeAddStepHandler;
-import org.jboss.as.controller.CapabilityServiceBuilder;
 import org.jboss.as.controller.OperationContext;
-import org.jboss.as.controller.OperationFailedException;
 import org.jboss.as.server.AbstractDeploymentChainStep;
 import org.jboss.as.server.DeploymentProcessorTarget;
 import org.jboss.as.server.deployment.Phase;
 import org.jboss.dmr.ModelNode;
+import org.jboss.msc.service.ServiceBuilder;
+import org.jboss.msc.service.ServiceTarget;
 import org.wildfly.extension.grpc.deployment.GrpcDependencyProcessor;
 import org.wildfly.extension.grpc.deployment.GrpcDeploymentProcessor;
-
-import static org.wildfly.extension.grpc.GrpcSubsystemDefinition.GRPC_CAPABILITY;
 
 class GrpcSubsystemAdd extends AbstractBoottimeAddStepHandler {
 
     static GrpcSubsystemAdd INSTANCE = new GrpcSubsystemAdd();
 
     @Override
-    protected void performBoottime(OperationContext context, ModelNode operation, ModelNode model)
-            throws OperationFailedException {
-        super.performBoottime(context, operation, model);
-
-        CapabilityServiceBuilder<?> csb = context.getCapabilityServiceTarget().addCapability(GRPC_CAPABILITY);
-        Consumer<GrpcService> consumer = csb.provides(GRPC_CAPABILITY, ServiceNames.GRPC);
-        GrpcService grpcService = new GrpcService(consumer);
-        csb.setInstance(grpcService);
-        csb.install();
+    protected void performBoottime(OperationContext context, ModelNode operation, ModelNode model) {
+        ServiceTarget serviceTarget = context.getServiceTarget();
+        ServiceBuilder<?> builder = serviceTarget.addService(GrpcSubsystemService.SERVICE_NAME);
+        builder.setInstance(new GrpcSubsystemService());
+        builder.install();
 
         context.addStep(new AbstractDeploymentChainStep() {
             public void execute(DeploymentProcessorTarget processorTarget) {
+                // TODO What phases and priorities should I use?
                 int DEPENDENCIES_PRIORITY = 6304;
                 processorTarget.addDeploymentProcessor(GrpcExtension.SUBSYSTEM_NAME, Phase.DEPENDENCIES,
                         DEPENDENCIES_PRIORITY, new GrpcDependencyProcessor());
 
                 int DEPLOYMENT_PRIORITY = 6305;
-                processorTarget.addDeploymentProcessor(GrpcExtension.SUBSYSTEM_NAME, Phase.DEPENDENCIES,
-                        DEPLOYMENT_PRIORITY, new GrpcDeploymentProcessor(grpcService));
+                processorTarget.addDeploymentProcessor(GrpcExtension.SUBSYSTEM_NAME, Phase.POST_MODULE,
+                        DEPLOYMENT_PRIORITY, new GrpcDeploymentProcessor());
             }
         }, OperationContext.Stage.RUNTIME);
     }

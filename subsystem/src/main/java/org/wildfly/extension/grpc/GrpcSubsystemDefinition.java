@@ -15,44 +15,27 @@
  */
 package org.wildfly.extension.grpc;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 import org.jboss.as.controller.AttributeDefinition;
 import org.jboss.as.controller.PersistentResourceDefinition;
 import org.jboss.as.controller.ReloadRequiredRemoveStepHandler;
 import org.jboss.as.controller.SimpleResourceDefinition;
-import org.jboss.as.controller.capability.RuntimeCapability;
 
 public class GrpcSubsystemDefinition extends PersistentResourceDefinition {
 
-    static final RuntimeCapability<Void> GRPC_CAPABILITY = RuntimeCapability.Builder
-            .of(Capabilities.CAPABILITY_GRPC, false, GrpcService.class)
-            .build();
-
     static final GrpcSubsystemDefinition INSTANCE = new GrpcSubsystemDefinition();
 
-    static final PersistentResourceDefinition[] CHILDREN = {
-            ServerDefinition.INSTANCE,
-    };
-
     public GrpcSubsystemDefinition() {
-        super(new SimpleResourceDefinition.Parameters(Paths.SUBSYSTEM_PATH, GrpcExtension.getResolver())
+        super(new SimpleResourceDefinition.Parameters(Paths.SUBSYSTEM, GrpcExtension.getResolver())
                 .setAddHandler(GrpcSubsystemAdd.INSTANCE)
                 .setRemoveHandler(ReloadRequiredRemoveStepHandler.INSTANCE)
-                .setCapabilities(GRPC_CAPABILITY)
         );
     }
 
     @Override
     public Collection<AttributeDefinition> getAttributes() {
         return Collections.emptyList();
-    }
-
-    @Override
-    public List<? extends PersistentResourceDefinition> getChildren() {
-        return Arrays.asList(CHILDREN);
     }
 }

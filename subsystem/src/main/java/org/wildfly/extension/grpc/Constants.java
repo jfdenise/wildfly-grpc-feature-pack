@@ -2,7 +2,7 @@ package org.wildfly.extension.grpc;
 
 public interface Constants {
 
-    String SERVER = "server";
-    String SOCKET_BINDING = "socket-binding";
+    String GRPC_SERVICE = "grpc-service";
+    String SERVICE_CLASS = "service-class";
     String SUBSYSTEM = "subsystem";
 }

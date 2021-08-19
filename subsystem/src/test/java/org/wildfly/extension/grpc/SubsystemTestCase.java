@@ -42,6 +42,6 @@ public class SubsystemTestCase extends AbstractSubsystemBaseTest {
     }
 
     protected AdditionalInitialization createAdditionalInitialization() {
-        return AdditionalInitialization.withCapabilities(Capabilities.REF_WELD);
+        return AdditionalInitialization.withCapabilities("org.wildfly.weld");
     }
 }

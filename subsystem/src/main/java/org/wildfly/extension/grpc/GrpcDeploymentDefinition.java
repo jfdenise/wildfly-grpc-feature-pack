@@ -15,9 +15,13 @@
  */
 package org.wildfly.extension.grpc;
 
-import org.jboss.msc.service.ServiceName;
+import org.jboss.as.controller.SimpleResourceDefinition;
 
-public interface ServiceNames {
+public class GrpcDeploymentDefinition extends SimpleResourceDefinition {
 
-    ServiceName GRPC = ServiceName.of("io.grpc.server");
+    static final GrpcDeploymentDefinition INSTANCE = new GrpcDeploymentDefinition();
+
+    public GrpcDeploymentDefinition() {
+        super(Paths.SUBSYSTEM, GrpcExtension.getResolver());
+    }
 }

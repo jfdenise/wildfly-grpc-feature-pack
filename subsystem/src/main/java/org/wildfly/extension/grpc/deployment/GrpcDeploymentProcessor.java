@@ -16,45 +16,106 @@
 package org.wildfly.extension.grpc.deployment;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
+import org.jboss.as.controller.PathElement;
+import org.jboss.as.server.Services;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
+import org.jboss.as.server.deployment.DeploymentResourceSupport;
 import org.jboss.as.server.deployment.DeploymentUnit;
+import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 import org.jboss.as.server.deployment.DeploymentUnitProcessor;
 import org.jboss.as.server.deployment.annotation.CompositeIndex;
+import org.jboss.dmr.ModelNode;
 import org.jboss.jandex.AnnotationInstance;
 import org.jboss.jandex.ClassInfo;
 import org.jboss.jandex.DotName;
-import org.wildfly.extension.grpc.GrpcService;
+import org.jboss.modules.Module;
+import org.jboss.msc.service.ServiceBuilder;
+import org.jboss.msc.service.ServiceName;
+import org.jboss.msc.service.ServiceTarget;
+import org.wildfly.extension.grpc.Constants;
+import org.wildfly.extension.grpc.GrpcDeploymentService;
+import org.wildfly.extension.grpc.GrpcExtension;
+import org.wildfly.extension.grpc.GrpcSubsystemService;
 import org.wildfly.extension.grpc._private.GrpcLogger;
 
 public class GrpcDeploymentProcessor implements DeploymentUnitProcessor {
 
     static final DotName GRPC_SERVICE = DotName.createSimple("org.wildfly.grpc.GrpcService");
 
-    private final GrpcService grpcService;
-
-    public GrpcDeploymentProcessor(final GrpcService grpcService) {
-        this.grpcService = grpcService;
-    }
-
     @Override
-    public void deploy(DeploymentPhaseContext phaseContext) {
+    public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
         DeploymentUnit deploymentUnit = phaseContext.getDeploymentUnit();
         CompositeIndex compositeIndex = deploymentUnit.getAttachment(Attachments.COMPOSITE_ANNOTATION_INDEX);
         if (compositeIndex.getAnnotations(GRPC_SERVICE).isEmpty()) {
             return;
         }
 
-        List<AnnotationInstance> grpcServices = compositeIndex.getAnnotations(GRPC_SERVICE);
-        if (grpcServices != null) {
-            for (AnnotationInstance annotationInstance : grpcServices) {
-                if (annotationInstance.target() instanceof ClassInfo) {
-                    ClassInfo clazz = (ClassInfo) annotationInstance.target();
-                    GrpcLogger.LOGGER.registerService(clazz.name().toString());
-                    // TODO Start gRPC server and register services
-                }
-            }
+        List<AnnotationInstance> serviceAnnotations = compositeIndex.getAnnotations(GRPC_SERVICE);
+        if (serviceAnnotations == null || serviceAnnotations.isEmpty()) {
+            return;
+        }
+
+        Module module = deploymentUnit.getAttachment(Attachments.MODULE);
+        if (module == null) {
+            throw new DeploymentUnitProcessingException("No module!");
+        }
+        ClassLoader classLoader = module.getClassLoader();
+        Map<String, String> serviceClasses = serviceAnnotations.stream()
+                .filter(annotationInstance -> annotationInstance.target() instanceof ClassInfo)
+                .map(annotationInstance -> (ClassInfo) annotationInstance.target())
+                .collect(Collectors.toMap(
+                        ClassInfo::simpleName,
+                        clazz -> clazz.name().toString()
+                ));
+
+        // install service
+        ServiceTarget serviceTarget = phaseContext.getServiceTarget();
+        ServiceName deploymentServiceName = GrpcSubsystemService.deploymentServiceName(deploymentUnit.getServiceName());
+        ServiceBuilder<?> serviceBuilder = serviceTarget.addService(deploymentServiceName);
+        Consumer<GrpcDeploymentService> deploymentServiceConsumer = serviceBuilder.provides(deploymentServiceName);
+        Supplier<GrpcSubsystemService> subsystemServiceSupplier = serviceBuilder.requires(
+                GrpcSubsystemService.SERVICE_NAME);
+        Supplier<ExecutorService> executorSupplier = Services.requireServerExecutor(serviceBuilder);
+
+        GrpcDeploymentService deploymentService = new GrpcDeploymentService(deploymentServiceConsumer,
+                subsystemServiceSupplier,
+                executorSupplier,
+                deploymentUnit.getName(),
+                serviceClasses,
+                classLoader);
+        serviceBuilder.setInstance(deploymentService);
+        serviceBuilder.install();
+
+        List<AnnotationInstance> grpcServiceAnnotations = compositeIndex.getAnnotations(GRPC_SERVICE);
+        if (grpcServiceAnnotations != null) {
+            Map<String, String> grpcServiceClasses = grpcServiceAnnotations.stream()
+                    .filter(annotationInstance -> annotationInstance.target() instanceof ClassInfo)
+                    .map(annotationInstance -> (ClassInfo) annotationInstance.target())
+                    .collect(Collectors.toMap(
+                            ClassInfo::simpleName,
+                            clazz -> clazz.name().toString()
+                    ));
+            // TODO Start gRPC server and register service(s)
+            processManagement(deploymentUnit, grpcServiceClasses);
+        }
+    }
+
+    private void processManagement(DeploymentUnit deploymentUnit, Map<String, String> grpcServiceClasses) {
+        DeploymentResourceSupport drs = deploymentUnit
+                .getAttachment(org.jboss.as.server.deployment.Attachments.DEPLOYMENT_RESOURCE_SUPPORT);
+
+        for (Map.Entry<String, String> entry : grpcServiceClasses.entrySet()) {
+            ModelNode serviceModel = drs.getDeploymentSubModel(GrpcExtension.SUBSYSTEM_NAME,
+                    PathElement.pathElement(Constants.GRPC_SERVICE, entry.getKey()));
+            serviceModel.get(Constants.SERVICE_CLASS).set(entry.getValue());
+            GrpcLogger.LOGGER.registerService(entry.getValue());
         }
     }
 

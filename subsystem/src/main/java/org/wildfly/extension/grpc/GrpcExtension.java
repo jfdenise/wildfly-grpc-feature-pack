@@ -46,12 +46,18 @@ public class GrpcExtension implements Extension {
     public void initialize(ExtensionContext extensionContext) {
         SubsystemRegistration sr = extensionContext.registerSubsystem(SUBSYSTEM_NAME, CURRENT_MODEL_VERSION);
         sr.registerXMLElementWriter(CURRENT_PARSER);
-        ManagementResourceRegistration root = sr.registerSubsystemModel(GrpcSubsystemDefinition.INSTANCE);
-        root.registerOperationHandler(
+
+        // /subsystem=grpc
+        ManagementResourceRegistration subsystem = sr.registerSubsystemModel(GrpcSubsystemDefinition.INSTANCE);
+        subsystem.registerOperationHandler(
                 GenericSubsystemDescribeHandler.DEFINITION,
                 GenericSubsystemDescribeHandler.INSTANCE,
                 false
         );
+
+        // /deployment=*/subsystem=grpc
+        ManagementResourceRegistration deployment = sr.registerDeploymentModel(GrpcDeploymentDefinition.INSTANCE);
+        deployment.registerSubModel(GrpcServiceDefinition.INSTANCE);
     }
 
     @Override

@@ -21,6 +21,6 @@ import static org.wildfly.extension.grpc.GrpcExtension.SUBSYSTEM_NAME;
 
 public interface Paths {
 
-    PathElement SUBSYSTEM_PATH = PathElement.pathElement(Constants.SUBSYSTEM, SUBSYSTEM_NAME);
-    PathElement SERVER_PATH = PathElement.pathElement(Constants.SERVER);
+    PathElement GRPC_SERVICE = PathElement.pathElement(Constants.GRPC_SERVICE);
+    PathElement SUBSYSTEM = PathElement.pathElement(Constants.SUBSYSTEM, SUBSYSTEM_NAME);
 }

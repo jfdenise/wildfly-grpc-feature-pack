@@ -27,7 +27,6 @@
 
     <artifactId>wildfly-grpc-example</artifactId>
     <name>WildFly gRPC :: Example</name>
-    <packaging>war</packaging>
 
     <properties>
         <os-maven-plugin.version>1.7.0</os-maven-plugin.version>
@@ -79,7 +78,6 @@
     </dependencies>
 
     <build>
-        <finalName>example</finalName>
         <extensions>
             <extension>
                 <groupId>kr.motd.maven</groupId>
