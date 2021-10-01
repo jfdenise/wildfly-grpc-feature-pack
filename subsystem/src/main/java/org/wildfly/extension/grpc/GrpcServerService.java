@@ -11,7 +11,6 @@ import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.netty.GrpcSslContexts;
 import io.grpc.netty.NettyServerBuilder;
-import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import org.jboss.as.controller.capability.CapabilityServiceSupport;
 import org.jboss.as.server.Services;
@@ -105,11 +104,12 @@ public class GrpcServerService implements Service {
         NettyServerBuilder serverBuilder = NettyServerBuilder.forPort(PORT);
         for (String serviceClass : serviceClasses.values()) {
             serverBuilder.addService(newService(serviceClass));
-
-            SslContextBuilder builder = SslContextBuilder.forServer(keyManager.get());
-            SslContext sslContext = GrpcSslContexts.configure(builder).build();
-            serverBuilder.sslContext(sslContext);
-
+            // TODO configure SSL
+            if (false) {
+                serverBuilder.sslContext(GrpcSslContexts
+                        .configure(SslContextBuilder.forServer(keyManager.get()))
+                        .build());
+            }
             GrpcLogger.LOGGER.registerService(serviceClass);
         }
         server = serverBuilder.build().start();

@@ -27,7 +27,7 @@
         <artifact name="${io.grpc:grpc-protobuf}"/>
         <artifact name="${io.grpc:grpc-protobuf-lite}"/>
         <artifact name="${io.grpc:grpc-stub}"/>
-        <artifact name="${io.netty:netty-handler}"/>
+        <artifact name="${io.netty:netty-all}"/>
         <artifact name="${io.perfmark:perfmark-api}"/>
         <artifact name="${com.google.protobuf:protobuf-java}"/>
         <artifact name="${com.google.protobuf:protobuf-java-util}"/>
@@ -37,7 +37,6 @@
         <module name="java.logging"/>
         <module name="javax.enterprise.api"/>
         <module name="com.google.guava"/>
-        <module name="io.netty"/>
         <module name="org.jboss.weld.api"/>
         <module name="org.jboss.weld.core"/>
         <module name="org.jboss.weld.spi"/>
