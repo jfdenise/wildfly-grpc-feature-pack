@@ -17,13 +17,9 @@ package org.wildfly.extension.grpc.deployment;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.jboss.as.controller.PathElement;
-import org.jboss.as.server.Services;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentResourceSupport;
@@ -35,13 +31,10 @@ import org.jboss.jandex.AnnotationInstance;
 import org.jboss.jandex.ClassInfo;
 import org.jboss.jandex.DotName;
 import org.jboss.modules.Module;
-import org.jboss.msc.service.ServiceBuilder;
-import org.jboss.msc.service.ServiceName;
 import org.jboss.msc.service.ServiceTarget;
 import org.wildfly.extension.grpc.Constants;
-import org.wildfly.extension.grpc.GrpcDeploymentService;
 import org.wildfly.extension.grpc.GrpcExtension;
-import org.wildfly.extension.grpc.GrpcSubsystemService;
+import org.wildfly.extension.grpc.GrpcServerService;
 
 public class GrpcDeploymentProcessor implements DeploymentUnitProcessor {
 
@@ -61,7 +54,6 @@ public class GrpcDeploymentProcessor implements DeploymentUnitProcessor {
         }
 
         Module module = deploymentUnit.getAttachment(Attachments.MODULE);
-        ClassLoader classLoader = module.getClassLoader();
         Map<String, String> serviceClasses = serviceAnnotations.stream()
                 .filter(annotationInstance -> annotationInstance.target() instanceof ClassInfo)
                 .map(annotationInstance -> (ClassInfo) annotationInstance.target())
@@ -69,32 +61,14 @@ public class GrpcDeploymentProcessor implements DeploymentUnitProcessor {
                         ClassInfo::simpleName,
                         clazz -> clazz.name().toString()
                 ));
-
-        // install service
-        ServiceTarget serviceTarget = phaseContext.getServiceTarget();
-        ServiceName deploymentServiceName = GrpcDeploymentService.deploymentServiceName(
-                deploymentUnit.getServiceName());
-        ServiceBuilder<?> serviceBuilder = serviceTarget.addService(deploymentServiceName);
-        Consumer<GrpcDeploymentService> deploymentServiceConsumer = serviceBuilder.provides(deploymentServiceName);
-        Supplier<GrpcSubsystemService> subsystemServiceSupplier = serviceBuilder.requires(
-                GrpcSubsystemService.SERVICE_NAME);
-        Supplier<ExecutorService> executorSupplier = Services.requireServerExecutor(serviceBuilder);
-        GrpcDeploymentService deploymentService = new GrpcDeploymentService(deploymentUnit.getName(),
-                deploymentServiceConsumer,
-                subsystemServiceSupplier,
-                executorSupplier,
-                serviceClasses,
-                classLoader);
-        serviceBuilder.setInstance(deploymentService);
-        serviceBuilder.install();
-
-        // add management resources
         processManagement(deploymentUnit, serviceClasses);
+
+        ServiceTarget serviceTarget = phaseContext.getServiceTarget();
+        GrpcServerService.install(serviceTarget, deploymentUnit, serviceClasses, module.getClassLoader());
     }
 
     private void processManagement(DeploymentUnit deploymentUnit, Map<String, String> grpcServiceClasses) {
-        DeploymentResourceSupport drs = deploymentUnit
-                .getAttachment(org.jboss.as.server.deployment.Attachments.DEPLOYMENT_RESOURCE_SUPPORT);
+        DeploymentResourceSupport drs = deploymentUnit.getAttachment(Attachments.DEPLOYMENT_RESOURCE_SUPPORT);
 
         for (Map.Entry<String, String> entry : grpcServiceClasses.entrySet()) {
             ModelNode serviceModel = drs.getDeploymentSubModel(GrpcExtension.SUBSYSTEM_NAME,

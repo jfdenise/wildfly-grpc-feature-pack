@@ -1,18 +1,3 @@
-/*
- * Copyright 2021 Red Hat, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.wildfly.extension.grpc;
 
 import java.io.IOException;
@@ -20,12 +5,22 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import javax.net.ssl.KeyManager;
 
 import io.grpc.BindableService;
 import io.grpc.Server;
-import io.grpc.ServerBuilder;
+import io.grpc.netty.GrpcSslContexts;
+import io.grpc.netty.NettyServerBuilder;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import org.jboss.as.controller.capability.CapabilityServiceSupport;
+import org.jboss.as.server.Services;
+import org.jboss.as.server.deployment.Attachments;
+import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.msc.Service;
+import org.jboss.msc.service.ServiceBuilder;
 import org.jboss.msc.service.ServiceName;
+import org.jboss.msc.service.ServiceTarget;
 import org.jboss.msc.service.StartContext;
 import org.jboss.msc.service.StartException;
 import org.jboss.msc.service.StopContext;
@@ -33,35 +28,59 @@ import org.wildfly.extension.grpc._private.GrpcLogger;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
-public class GrpcDeploymentService implements Service {
+public class GrpcServerService implements Service {
 
-    public static final ServiceName GRPC_DEPLOYMENT = ServiceName.of("grpc-deployment");
+    public static final ServiceName SERVICE_NAME = ServiceName.of("grpc-server");
     private static final long SHUTDOWN_TIMEOUT = 3; // seconds
-    private static final String HOST = "127.0.0.1"; // TODO make configurable
+    private static final String HOST = "localhost"; // TODO make configurable
     private static final int PORT = 9555; // TODO make configurable
+    private static final String KEY_MANAGER = "applicationKM";
 
-    public static ServiceName deploymentServiceName(ServiceName deploymentServiceName) {
-        return deploymentServiceName.append(GRPC_DEPLOYMENT);
+    public static void install(ServiceTarget serviceTarget,
+            DeploymentUnit deploymentUnit,
+            Map<String, String> serviceClasses,
+            ClassLoader classLoader) {
+        // setup service
+        ServiceName serviceName = deploymentUnit.getServiceName().append(SERVICE_NAME);
+        ServiceBuilder<?> serviceBuilder = serviceTarget.addService(serviceName);
+        Consumer<GrpcServerService> serviceConsumer = serviceBuilder.provides(serviceName);
+
+        // wire dependencies
+        Supplier<ExecutorService> executorSupplier = Services.requireServerExecutor(serviceBuilder);
+        CapabilityServiceSupport css = deploymentUnit.getAttachment(Attachments.CAPABILITY_SERVICE_SUPPORT);
+        ServiceName keyManagerName = css.getCapabilityServiceName(Capabilities.KEY_MANAGER_CAPABILITY,
+                KEY_MANAGER);
+        Supplier<KeyManager> keyManagerSupplier = serviceBuilder.requires(keyManagerName);
+
+        // install service
+        GrpcServerService service = new GrpcServerService(deploymentUnit.getName(),
+                serviceConsumer,
+                executorSupplier,
+                keyManagerSupplier,
+                serviceClasses,
+                classLoader);
+        serviceBuilder.setInstance(service);
+        serviceBuilder.install();
     }
 
     private final String name;
-    private final Consumer<GrpcDeploymentService> deploymentService;
-    private final Supplier<GrpcSubsystemService> subsystemService;
+    private final Consumer<GrpcServerService> serverService;
     private final Supplier<ExecutorService> executorService;
+    private final Supplier<KeyManager> keyManager;
     private final Map<String, String> serviceClasses;
     private final ClassLoader classLoader;
     private Server server;
 
-    public GrpcDeploymentService(String name,
-            Consumer<GrpcDeploymentService> deploymentService,
-            Supplier<GrpcSubsystemService> subsystemService,
+    private GrpcServerService(String name,
+            Consumer<GrpcServerService> serverService,
             Supplier<ExecutorService> executorService,
+            Supplier<KeyManager> keyManager,
             Map<String, String> serviceClasses,
             ClassLoader classLoader) {
         this.name = name;
-        this.deploymentService = deploymentService;
-        this.subsystemService = subsystemService;
+        this.serverService = serverService;
         this.executorService = executorService;
+        this.keyManager = keyManager;
         this.serviceClasses = serviceClasses;
         this.classLoader = classLoader;
     }
@@ -77,15 +96,20 @@ public class GrpcDeploymentService implements Service {
                 context.failed(new StartException(e));
             }
         });
-        deploymentService.accept(this);
+        serverService.accept(this);
     }
 
     private void startServer()
             throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         GrpcLogger.LOGGER.serverListening(name, HOST, PORT);
-        ServerBuilder<?> serverBuilder = ServerBuilder.forPort(PORT);
+        NettyServerBuilder serverBuilder = NettyServerBuilder.forPort(PORT);
         for (String serviceClass : serviceClasses.values()) {
             serverBuilder.addService(newService(serviceClass));
+
+            SslContextBuilder builder = SslContextBuilder.forServer(keyManager.get());
+            SslContext sslContext = GrpcSslContexts.configure(builder).build();
+            serverBuilder.sslContext(sslContext);
+
             GrpcLogger.LOGGER.registerService(serviceClass);
         }
         server = serverBuilder.build().start();
@@ -103,12 +127,12 @@ public class GrpcDeploymentService implements Service {
     }
 
     @Override
-    public void stop(StopContext context) {
+    public void stop(final StopContext context) {
         GrpcLogger.LOGGER.serverStopping(name);
         if (server != null) {
             stopServer();
         }
-        deploymentService.accept(null);
+        serverService.accept(null);
     }
 
     private void stopServer() {
