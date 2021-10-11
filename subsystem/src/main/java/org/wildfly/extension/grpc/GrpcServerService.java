@@ -102,14 +102,14 @@ public class GrpcServerService implements Service {
             throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         GrpcLogger.LOGGER.serverListening(name, HOST, PORT);
         NettyServerBuilder serverBuilder = NettyServerBuilder.forPort(PORT);
+        // TODO configure SSL
+        if (false) {
+            serverBuilder.sslContext(GrpcSslContexts
+                    .configure(SslContextBuilder.forServer(keyManager.get()))
+                    .build());
+        }
         for (String serviceClass : serviceClasses.values()) {
             serverBuilder.addService(newService(serviceClass));
-            // TODO configure SSL
-            if (false) {
-                serverBuilder.sslContext(GrpcSslContexts
-                        .configure(SslContextBuilder.forServer(keyManager.get()))
-                        .build());
-            }
             GrpcLogger.LOGGER.registerService(serviceClass);
         }
         server = serverBuilder.build().start();

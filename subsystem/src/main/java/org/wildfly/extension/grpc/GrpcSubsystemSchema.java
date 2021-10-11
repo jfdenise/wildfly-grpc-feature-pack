@@ -15,18 +15,14 @@
  */
 package org.wildfly.extension.grpc;
 
-import java.util.HashMap;
-import java.util.Map;
+enum GrpcSubsystemSchema {
 
-enum Namespace {
-
-    UNKNOWN(null),
     GRPC_1_0("urn:wildfly:grpc:1.0"),
     ;
 
     private final String name;
 
-    Namespace(String name) {
+    GrpcSubsystemSchema(String name) {
         this.name = name;
     }
 
@@ -37,18 +33,5 @@ enum Namespace {
      */
     public String getUriString() {
         return name;
-    }
-
-    private static final Map<String, Namespace> MAP;
-
-    static {
-        final Map<String, Namespace> map = new HashMap<String, Namespace>();
-        for (Namespace namespace : values()) {
-            final String name = namespace.getUriString();
-            if (name != null) {
-                map.put(name, namespace);
-            }
-        }
-        MAP = map;
     }
 }

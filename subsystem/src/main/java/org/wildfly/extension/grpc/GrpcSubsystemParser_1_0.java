@@ -25,7 +25,7 @@ public class GrpcSubsystemParser_1_0 extends PersistentResourceXMLParser {
     public static final String NAMESPACE = "urn:wildfly:grpc:1.0";
 
     private static final PersistentResourceXMLDescription xmlDescription = builder(
-            GrpcSubsystemDefinition.INSTANCE.getPathElement(), Namespace.GRPC_1_0.getUriString())
+            GrpcSubsystemDefinition.INSTANCE.getPathElement(), GrpcSubsystemSchema.GRPC_1_0.getUriString())
             .build();
 
     @Override
