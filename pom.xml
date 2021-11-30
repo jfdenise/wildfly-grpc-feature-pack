@@ -54,9 +54,8 @@
         <version.org.wildfly.common>1.5.4.Final</version.org.wildfly.common>
 
         <!-- gRPC, Protobuf versions & related -->
-        <version.io.grpc>1.39.0</version.io.grpc>
+        <version.io.grpc>1.42.1</version.io.grpc>
         <version.com.google.protobuf>4.0.0-rc-2</version.com.google.protobuf>
-        <version.io.netty>4.1.65.Final</version.io.netty>
         <version.io.perfmark>0.24.0</version.io.perfmark>
         <version.javax.annotation-api>1.3.2</version.javax.annotation-api>
 
@@ -108,6 +107,29 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- BOMs first and in THIS order! -->
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-bom</artifactId>
+                <version>${version.com.google.protobuf}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-bom</artifactId>
+                <version>${version.io.grpc}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wildfly</groupId>
+                <artifactId>wildfly-component-matrix</artifactId>
+                <version>${version.org.wildfly}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <!-- WildFly dependencies -->
             <dependency>
                 <groupId>org.wildfly</groupId>
@@ -120,13 +142,6 @@
                 <artifactId>wildfly-galleon-pack</artifactId>
                 <version>${version.org.wildfly}</version>
                 <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wildfly</groupId>
-                <artifactId>wildfly-component-matrix</artifactId>
-                <version>${version.org.wildfly}</version>
-                <type>pom</type>
-                <scope>import</scope>
             </dependency>
 
             <!-- Project -->
@@ -171,28 +186,7 @@
                 </exclusions>
             </dependency>
 
-            <!-- gRPC & related dependencies -->
-            <dependency>
-                <groupId>io.grpc</groupId>
-                <artifactId>grpc-bom</artifactId>
-                <version>${version.io.grpc}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.google.protobuf</groupId>
-                <artifactId>protobuf-bom</artifactId>
-                <version>${version.com.google.protobuf}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-bom</artifactId>
-                <version>${version.io.netty}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+            <!-- Misc dependencies -->
             <dependency>
                 <groupId>io.perfmark</groupId>
                 <artifactId>perfmark-api</artifactId>
