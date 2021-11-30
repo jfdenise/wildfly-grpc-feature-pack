@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.0"?>
 <!--
 
      Copyright 2021 Red Hat, Inc.
@@ -16,8 +16,12 @@
      limitations under the License.
 
 -->
+<!DOCTYPE suppressions PUBLIC
+        "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+        "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
 
-<tasks xmlns="urn:wildfly:wildfly-feature-pack-tasks:2.0">
-    <delete path="docs/licenses/licenses.html"/>
-    <transform stylesheet="docs/licenses/licenses.xsl" src="docs/licenses/licenses.xml" output="docs/licenses/licenses.html" phase="FINALIZING"/>
-</tasks>
+<suppressions>
+    <!-- Ignore files pulled down from zanata -->
+    <suppress files="LocalDescriptions_.+\.properties|.*\.i18n_.+\.properties" checks=".*"/>
+    <suppress files=".*/protobuf/.*" checks=".*"/>
+</suppressions>

@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2021 Red Hat, Inc.
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~   http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
+
+     Copyright 2021 Red Hat, Inc.
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.jboss</groupId>
         <artifactId>jboss-parent</artifactId>
-        <version>38</version>
+        <version>39</version>
     </parent>
 
     <groupId>org.wildfly.extras.grpc</groupId>
@@ -27,11 +29,13 @@
     <version>0.0.1</version>
     <packaging>pom</packaging>
     <name>WildFly gRPC :: Parent</name>
+    <description>WildFly gRPC subsystem</description>
+    <inceptionYear>2021</inceptionYear>
 
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -44,28 +48,10 @@
     </scm>
 
     <properties>
-        <!--
-            Target WildFly version, and other parts needed for the Galleon maven plugin
-        -->
-        <version.org.wildfly>24.0.0.Final</version.org.wildfly>
-        <!--
-            The value of version.org.wildfly.core from the WildFly version tag. E.g. for 20.0.0.Final it is
-            found here: https://github.com/wildfly/wildfly/blob/20.0.0.Final/pom.xml#L445
-        -->
-        <version.org.wildfly.core>16.0.0.Final</version.org.wildfly.core>
-        <!--
-            The value of version.org.wildfly.common from the WildFly Core version tag. E.g. for 12.0.1.Final it is
-            found here: https://github.com/wildfly/wildfly-core/blob/12.0.1.Final/pom.xml#L217
-        -->
+        <!-- WildFly -->
+        <version.org.wildfly>25.0.0.Final</version.org.wildfly>
+        <version.org.wildfly.core>17.0.3.Final</version.org.wildfly.core>
         <version.org.wildfly.common>1.5.4.Final</version.org.wildfly.common>
-
-        <!-- Other dependency versions -->
-        <version.org.jboss.arquillian.junit>1.6.0.Final</version.org.jboss.arquillian.junit>
-        <version.org.jboss.galleon>4.2.8.Final</version.org.jboss.galleon>
-
-        <!-- Plugin versions and their dependency versions -->
-        <version.org.wildfly.checkstyle-config>1.0.8.Final</version.org.wildfly.checkstyle-config>
-        <version.org.wildfly.galleon-plugins>4.2.8.Final</version.org.wildfly.galleon-plugins>
 
         <!-- gRPC, Protobuf versions & related -->
         <version.io.grpc>1.39.0</version.io.grpc>
@@ -74,36 +60,42 @@
         <version.io.perfmark>0.24.0</version.io.perfmark>
         <version.javax.annotation-api>1.3.2</version.javax.annotation-api>
 
-        <!-- Misc. -->
+        <!-- Other dependency versions -->
+        <version.org.jboss.arquillian.junit>1.6.0.Final</version.org.jboss.arquillian.junit>
+        <version.org.jboss.galleon>4.2.8.Final</version.org.jboss.galleon>
+
+        <!-- Plugin versions -->
+        <version.org.wildfly.checkstyle-config>1.0.8.Final</version.org.wildfly.checkstyle-config>
+        <version.org.wildfly.galleon-plugins>4.2.8.Final</version.org.wildfly.galleon-plugins>
+        <version.wildfly.maven.plugin>2.0.0.Final</version.wildfly.maven.plugin>
+        <version.licenses-plugin>2.3.0.Final</version.licenses-plugin>
+        <license-maven-plugin.version>4.1</license-maven-plugin.version>
+        <formatter-maven-plugin.version>2.17.0</formatter-maven-plugin.version>
+        <impsort-maven-plugin.version>1.6.2</impsort-maven-plugin.version>
+
+        <!-- Repos, URLs & protocols -->
         <wildfly-grpc.repo.scm.connection>git@github.com:hpehl/wildfly-grpc-feature-pack.git</wildfly-grpc.repo.scm.connection>
         <wildfly-grpc.repo.scm.url>https://github.com/hpehl/wildfly-grpc-feature-pack</wildfly-grpc.repo.scm.url>
-        <!-- Protocol to use for communication with remote maven repositories.
-            You can set to 'http' if you are using a maven proxy and 'https'
-            interferes with that. Use 'https' for builds that will be released
-            to non-snapshot public maven repos
-        -->
         <maven.repository.protocol>https</maven.repository.protocol>
-        <!-- The full remote maven repo URL; can be overridden via -D for special use cases -->
         <maven.repository.url>${maven.repository.protocol}://repository.jboss.org/nexus/content/groups/public/</maven.repository.url>
-        <!-- https://access.redhat.com/maven-repository - this is needed for the picketlink dependency -->
         <maven.redhat.repository.url>${maven.repository.protocol}://maven.repository.redhat.com/ga/</maven.redhat.repository.url>
 
-        <!-- Name of the built server -->
+        <!-- Build related -->
+        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <formatter.config>${project.basedir}/etc/eclipse-formatter-config.xml</formatter.config>
         <server.name>wildfly-${version.org.wildfly}-grpc-${project.version}</server.name>
         <wildfly.build.output.dir>build/target/${server.name}</wildfly.build.output.dir>
 
         <!-- Galleon -->
         <galleon.fork.embedded>true</galleon.fork.embedded>
         <galleon.log.time>true</galleon.log.time>
-        <!-- Builds need to override this -->
         <galleon.wildfly.home>/tmp</galleon.wildfly.home>
 
         <!-- Checkstyle configuration -->
         <linkXRef>false</linkXRef>
-
-        <!-- WildFLy plugin version. We use it to be able to run wildfly:deploy for the example -->
-        <version.wildfly.maven.plugin>2.0.0.Final</version.wildfly.maven.plugin>
-        <version.licenses-plugin>2.3.0.Final</version.licenses-plugin>
     </properties>
 
     <modules>
@@ -130,8 +122,6 @@
                 <version>${version.org.wildfly}</version>
                 <type>zip</type>
             </dependency>
-
-            <!-- This BOM makes most of the dependencies from WildFly available for normal (non-plugin use -->
             <dependency>
                 <groupId>org.wildfly</groupId>
                 <artifactId>wildfly-component-matrix</artifactId>
@@ -237,6 +227,31 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>com.mycila</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>${license-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>net.revelc.code.formatter</groupId>
+                    <artifactId>formatter-maven-plugin</artifactId>
+                    <version>${formatter-maven-plugin.version}</version>
+                    <inherited>false</inherited>
+                    <configuration>
+                        <configFile>${formatter.config}</configFile>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>net.revelc.code</groupId>
+                    <artifactId>impsort-maven-plugin</artifactId>
+                    <version>${impsort-maven-plugin.version}</version>
+                    <configuration>
+                        <groups>java.,javax.,org.,io.,com.</groups>
+                        <removeUnused>true</removeUnused>
+                        <staticAfter>true</staticAfter>
+                        <!-- <staticGroups>java.,javax.,org.w3c.,org.xml.,junit.</staticGroups> -->
+                    </configuration>
+                </plugin>
+                <plugin>
                     <groupId>org.jboss.galleon</groupId>
                     <artifactId>galleon-maven-plugin</artifactId>
                     <version>${version.org.jboss.galleon}</version>
@@ -301,7 +316,7 @@
                         <failsOnError>true</failsOnError>
                         <includeTestSourceDirectory>true</includeTestSourceDirectory>
                         <excludes>**/*$logger.java,**/*$bundle.java</excludes>
-                        <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
+                        <suppressionsLocation>etc/checkstyle-suppressions.xml</suppressionsLocation>
                         <useFile/>
                     </configuration>
                 </plugin>
@@ -312,6 +327,55 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <configuration>
+                    <header>etc/license.txt</header>
+                    <strictCheck>true</strictCheck>
+                    <aggregate>true</aggregate>
+                    <mapping>
+                        <proto>JAVADOC_STYLE</proto>
+                    </mapping>
+                    <excludes>
+                        <exclude>LICENSE.txt</exclude>
+                        <exclude>**/*license*.txt</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>net.revelc.code.formatter</groupId>
+                <artifactId>formatter-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>format</id>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                        <phase>process-sources</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>net.revelc.code</groupId>
+                <artifactId>impsort-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>sort-imports</id>
+                        <goals>
+                            <goal>sort</goal>
+                        </goals>
+                        <phase>process-sources</phase>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
