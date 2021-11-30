@@ -85,7 +85,6 @@
         <maven.compiler.source>11</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <formatter.config>${project.basedir}/etc/eclipse-formatter-config.xml</formatter.config>
         <server.name>wildfly-${version.org.wildfly}-grpc-${project.version}</server.name>
         <wildfly.build.output.dir>build/target/${server.name}</wildfly.build.output.dir>
 
@@ -237,7 +236,7 @@
                     <version>${formatter-maven-plugin.version}</version>
                     <inherited>false</inherited>
                     <configuration>
-                        <configFile>${formatter.config}</configFile>
+                        <configFile>etc/eclipse-formatter-config.xml</configFile>
                     </configuration>
                 </plugin>
                 <plugin>
