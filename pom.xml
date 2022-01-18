@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-     Copyright 2021 Red Hat, Inc.
+     Copyright 2022 Red Hat, Inc.
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -49,8 +49,8 @@
 
     <properties>
         <!-- WildFly -->
-        <version.org.wildfly>25.0.0.Final</version.org.wildfly>
-        <version.org.wildfly.core>17.0.3.Final</version.org.wildfly.core>
+        <version.org.wildfly>26.0.0.Final</version.org.wildfly>
+        <version.org.wildfly.core>18.0.3.Final</version.org.wildfly.core>
         <version.org.wildfly.common>1.5.4.Final</version.org.wildfly.common>
 
         <!-- gRPC, Protobuf versions & related -->
@@ -235,6 +235,7 @@
                         <excludes>
                             <exclude>LICENSE.txt</exclude>
                             <exclude>**/*license*.txt</exclude>
+                            <exclude>work/**</exclude>
                         </excludes>
                     </configuration>
                 </plugin>
@@ -274,8 +275,8 @@
                     <version>${version.org.wildfly.galleon-plugin}</version>
                     <dependencies>
                         <!--
-                            feature-spec-gen uses wildfly-embedded to generate the feature specs, hence the designated
-                            wildfly-embedded version must match the pack one
+                            feature-spec-gen uses wildfly-embedded to generate the feature specs,
+                            hence the designated wildfly-embedded version must match the pack one
                         -->
                         <dependency>
                             <groupId>org.wildfly.core</groupId>

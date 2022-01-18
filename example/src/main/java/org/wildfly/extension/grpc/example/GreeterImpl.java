@@ -1,5 +1,5 @@
 /*
- *  Copyright 2021 Red Hat, Inc.
+ *  Copyright 2022 Red Hat, Inc.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,9 +23,10 @@ import io.grpc.stub.StreamObserver;
 public class GreeterImpl extends GreeterGrpc.GreeterImplBase {
 
     @Override
-    public void sayHello(HelloRequest req, StreamObserver<HelloReply> responseObserver) {
-        HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + req.getName()).build();
-        responseObserver.onNext(reply);
+    public void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
+        String name = request.getName();
+        String message = "Hello " + name;
+        responseObserver.onNext(HelloReply.newBuilder().setMessage(message).build());
         responseObserver.onCompleted();
     }
 }

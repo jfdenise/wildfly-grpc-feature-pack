@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 
-     Copyright 2021 Red Hat, Inc.
+     Copyright 2022 Red Hat, Inc.
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -34,10 +34,11 @@
         <module name="org.jboss.as.network"/>
         <module name="org.jboss.staxmapper"/>
         <module name="org.wildfly.security.manager"/>
-
         <!--
-            Additional module dependencies. If they contain any classes that should be exposed to the user's code,
-            (e.g. in a deployment) make sure you add them in the subsystem's DependencyProcessor too
+            Additional module dependencies.
+            If they contain any classes that should be exposed to the user's code,
+            (e.g. in a deployment) make sure you add them in the subsystem's
+            DependencyProcessor too
         -->
         <module name="org.wildfly.grpc-dependency"/>
     </dependencies>
