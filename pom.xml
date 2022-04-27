@@ -69,7 +69,7 @@
         <version.org.wildfly.maven.plugin>2.0.0.Final</version.org.wildfly.maven.plugin>
         <version.org.wildfly.license-plugin>2.3.0.Final</version.org.wildfly.license-plugin>
         <version.com.mycila.license-plugin>4.1</version.com.mycila.license-plugin>
-        <version.net.revelc.formatter-plugin>2.17.0</version.net.revelc.formatter-plugin>
+        <version.net.revelc.formatter-plugin>2.18.0</version.net.revelc.formatter-plugin>
         <version.net.revelc.impsort-plugin>1.6.2</version.net.revelc.impsort-plugin>
 
         <!-- Repos, URLs & protocols -->
