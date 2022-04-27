@@ -68,10 +68,6 @@
             <artifactId>protobuf-java-util</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-buffer</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.perfmark</groupId>
             <artifactId>perfmark-api</artifactId>
         </dependency>
