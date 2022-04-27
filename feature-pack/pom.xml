@@ -113,6 +113,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-transport</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>io.perfmark</groupId>
             <artifactId>perfmark-api</artifactId>
             <scope>provided</scope>
