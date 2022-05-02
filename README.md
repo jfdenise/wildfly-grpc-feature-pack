@@ -13,24 +13,16 @@ mvn install
 This will build everything, and run the testsuite. A WildFly server with the gRPC subsystem will be created in
 the `build/target` directory.
 
-## Deploy Example
+## Run the Example
 
 The `example` folder contains the 'Hello World' example from
 the [gRPC Java examples](https://github.com/grpc/grpc-java/tree/master/examples).
 
-Start the server by running
+Build the example, provision a wildfly server with grpc  and start the server in background:
 
 ```shell
-./build/target/wildfly-<wildfly-version>-grpc-<wildfly-grpc-version>/bin/standalone.sh
+mvn package wildfly:start -pl example
 ```
-
-In another terminal window run:
-
-```shell
-mvn package wildfly:deploy -pl example
-```
-
-and see the application gets deployed.
 
 You can use tools like [BloomRPC](https://github.com/uw-labs/bloomrpc)
 or [gRPCurl](https://github.com/fullstorydev/grpcurl) to invoke the deployed 'Hello World' gRPC service:
@@ -40,4 +32,9 @@ grpcurl \
   -proto example/src/main/proto/helloworld.proto \
   -plaintext -d '{"name":"Bob"}' \
   localhost:9555 helloworld.Greeter/SayHello
+```
+
+Kill the server
+```shell
+mvn wildfly:shutdown -pl example
 ```

@@ -54,8 +54,35 @@
         <finalName>${server.name}</finalName>
         <plugins>
             <plugin>
-                <groupId>org.jboss.galleon</groupId>
-                <artifactId>galleon-maven-plugin</artifactId>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <configuration>
+                    <feature-packs>
+                        <feature-pack>
+                            <groupId>org.wildfly</groupId>
+                            <artifactId>wildfly-galleon-pack</artifactId>
+                            <version>${version.org.wildfly}</version>
+                        </feature-pack>
+                        <feature-pack>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>wildfly-grpc-feature-pack</artifactId>
+                            <version>${project.version}</version>
+                        </feature-pack>
+                    </feature-packs>
+                    <layers>
+                        <layer>web-server</layer>
+                        <layer>jmx-remoting</layer>
+                        <!-- Layers from this FP  -->
+                        <layer>grpc</layer>
+                    </layers>
+                    <galleon-options>
+                        <jboss-maven-dist/>
+                        <jboss-fork-embedded>${galleon.fork.embedded}</jboss-fork-embedded>
+                    </galleon-options>
+                    <provisioning-dir>${project.build.finalName}</provisioning-dir>
+                    <log-provisioning-time>${galleon.log.time}</log-provisioning-time>
+                    <offline>true</offline>
+                </configuration>
                 <executions>
                     <execution>
                         <id>server-provisioning</id>
@@ -63,49 +90,6 @@
                             <goal>provision</goal>
                         </goals>
                         <phase>prepare-package</phase>
-                        <configuration>
-                            <install-dir>${project.build.directory}/${project.build.finalName}</install-dir>
-                            <record-state>false</record-state>
-                            <log-time>${galleon.log.time}</log-time>
-                            <offline>true</offline>
-                            <feature-packs>
-                                <feature-pack>
-                                    <groupId>org.wildfly</groupId>
-                                    <artifactId>wildfly-galleon-pack</artifactId>
-                                    <version>${version.org.wildfly}</version>
-                                    <inherit-packages>false</inherit-packages>
-                                    <inherit-configs>false</inherit-configs>
-                                </feature-pack>
-                                <feature-pack>
-                                    <groupId>${project.groupId}</groupId>
-                                    <artifactId>wildfly-grpc-feature-pack</artifactId>
-                                    <version>${project.version}</version>
-                                    <inherit-packages>false</inherit-packages>
-                                    <inherit-configs>false</inherit-configs>
-                                </feature-pack>
-                            </feature-packs>
-                            <configurations>
-                                <config>
-                                    <model>standalone</model>
-                                    <name>standalone.xml</name>
-                                    <layers>
-                                        <!--
-                                            Layers needed to have a base server that makes sense,
-                                            which are not required by these FPs layers
-                                        -->
-                                        <layer>jaxrs</layer>
-                                        <layer>management</layer>
-                                        <!-- Layers from this FP  -->
-                                        <layer>grpc</layer>
-                                    </layers>
-                                </config>
-                            </configurations>
-                            <plugin-options>
-                                <jboss-maven-dist/>
-                                <jboss-fork-embedded>${galleon.fork.embedded}</jboss-fork-embedded>
-                                <optional-packages>passive+</optional-packages>
-                            </plugin-options>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>

@@ -61,7 +61,6 @@
 
         <!-- Other dependency versions -->
         <version.org.jboss.arquillian.junit>1.6.0.Final</version.org.jboss.arquillian.junit>
-        <version.org.jboss.galleon>4.2.8.Final</version.org.jboss.galleon>
 
         <!-- Plugin versions -->
         <version.org.wildfly.checkstyle-config>1.0.8.Final</version.org.wildfly.checkstyle-config>
@@ -258,11 +257,6 @@
                         <staticAfter>true</staticAfter>
                         <!-- <staticGroups>java.,javax.,org.w3c.,org.xml.,junit.</staticGroups> -->
                     </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.jboss.galleon</groupId>
-                    <artifactId>galleon-maven-plugin</artifactId>
-                    <version>${version.org.jboss.galleon}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.wildfly.maven.plugins</groupId>
