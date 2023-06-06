@@ -16,7 +16,7 @@
      limitations under the License.
 
 -->
-<layer-spec xmlns="urn:jboss:galleon:layer-spec:1.0" name="grpc">
+<layer-spec xmlns="urn:jboss:galleon:layer-spec:2.0" name="grpc">
     <props>
         <prop name="add-on" value="rpc,grpc" />
         <prop name="add-on-depends-on" value="none" />
