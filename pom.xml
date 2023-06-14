@@ -55,7 +55,7 @@
 
         <!-- gRPC, Protobuf versions & related -->
         <version.com.google.protobuf>4.0.0-rc-2</version.com.google.protobuf>
-        <version.io.grpc>1.46.0</version.io.grpc>
+        <version.io.grpc>1.56.0</version.io.grpc>
         <version.io.perfmark>0.25.0</version.io.perfmark>
         <version.javax.annotation-api>1.3.2</version.javax.annotation-api>
 
